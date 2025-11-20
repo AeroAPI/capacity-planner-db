@@ -6,8 +6,8 @@ A real-time, comprehensive tool for capacity planning of a distributed database 
 
 This repository contains two versions of the tool:
 
-1.  **Web GUI Orginal MVP (`https://wmaddux.github.io/capacity-planner-db/capacity_planner_mvp.html`):** An interactive, real-time web application using JavaScript/HTML/Tailwind.
-2.  **Modular Script (`python/`):** A modular, command-line tool written in Python for batch processing and reporting.
+1.  **Web GUI Orginal MVP (`capacity_planner_mvp.html`):** Access the tool here: [Capacity Planner Web GUI](https://wmaddux.github.io/capacity-planner-db/capacity_planner_mvp.html)
+3.  **Modular Script (`python/`):** A modular, command-line tool written in Python for batch processing and reporting.
 
 -----
 
