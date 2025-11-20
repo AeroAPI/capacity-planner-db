@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Distributed DB Capacity Planner</title>
+    <title>Aerospike Capacity Planner (namespace sizing)</title>
     <!-- 1. CSS STYLING (Tailwind CDN + Custom Styles) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -395,19 +395,19 @@
          */
         const INPUT_CONFIG = {
             // --- TOPOLOGY ---
-            RF: { min: 1, max: 5, step: 1, default: 3, suffix: '' },
-            NPC: { min: 1, max: 150, step: 1, default: 3, suffix: '' },
-            DPN: { min: 1, max: 32, step: 1, default: 3, suffix: '' },
-            DS: { min: 100, max: 1000, step: 50, default: 500, suffix: 'GB' },
+            RF: { min: 1, max: 5, step: 1, default: 2, suffix: '' },
+            NPC: { min: 1, max: 150, step: 1, default: 12, suffix: '' },
+            DPN: { min: 1, max: 32, step: 1, default: 18, suffix: '' },
+            DS: { min: 50, max: 1000, step: 5, default: 55, suffix: 'GB' },
             
             // --- FAILURE SCENARIO ---
             NODES_LOST: { min: 1, max: 50, step: 1, default: 1, suffix: '' },
 
             // --- WORKLOAD ---
             // MOC is 1 to 1000 Billion (10^9)
-            MOC: { min: 1, max: 1000, step: 1, default: 10, suffix: 'B' }, 
-            ARS: { min: 100, max: 4096, step: 32, default: 512, suffix: 'B' },
-            ASEO: { min: 0.1, max: 5.0, step: 0.1, default: 1, suffix: '' },
+            MOC: { min: 1, max: 1000, step: 1, default: 8, suffix: 'B' }, 
+            ARS: { min: 100, max: 4096, step: 10, default: 250, suffix: 'B' },
+            ASEO: { min: 0, max: 50, step: 1, default: 1, suffix: '' },
             NSI: { min: 0, max: 32, step: 1, default: 5, suffix: '' },
             TP: { min: 0, max: 100, step: 5, default: 10, suffix: '%' },
             
