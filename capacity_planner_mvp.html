@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Distributed DB Capacity Planner</title>
-    <!-- Load Tailwind CSS via CDN -->
+    <!-- 1. CSS STYLING (Tailwind CDN + Custom Styles) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -50,7 +50,7 @@
         
         <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- LEFT COLUMN: INPUTS -->
+            <!-- LEFT COLUMN: INPUTS (Now purely structural, values set by JS) -->
             <div class="lg:w-1/2 space-y-6">
                 <h2 class="text-xl font-semibold text-indigo-700 mb-4">1. System & Workload Configuration</h2>
 
@@ -64,29 +64,29 @@
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Replication Factor</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="RF" min="1" max="5" value="3" step="1" oninput="updateValue('RF', 'RFValue'); calculate()">
-                                <span id="RFValue" class="text-sm font-semibold text-indigo-600 w-8 text-right">3</span>
+                                <input type="range" id="RF" oninput="calculate()">
+                                <span id="RFValue" class="text-sm font-semibold text-indigo-600 w-8 text-right"></span>
                             </div>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Nodes per Cluster (NPC)</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="NPC" min="1" max="150" value="3" step="1" oninput="updateValue('NPC', 'NPCValue'); calculate()">
-                                <span id="NPCValue" class="text-sm font-semibold text-indigo-600 w-8 text-right">3</span>
+                                <input type="range" id="NPC" oninput="calculate()">
+                                <span id="NPCValue" class="text-sm font-semibold text-indigo-600 w-8 text-right"></span>
                             </div>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Devices per Node (DPN)</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="DPN" min="1" max="32" value="3" step="1" oninput="updateValue('DPN', 'DPNValue'); calculate()">
-                                <span id="DPNValue" class="text-sm font-semibold text-indigo-600 w-8 text-right">3</span>
+                                <input type="range" id="DPN" oninput="calculate()">
+                                <span id="DPNValue" class="text-sm font-semibold text-indigo-600 w-8 text-right"></span>
                             </div>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Device Size (GB)</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="DS" min="100" max="1000" value="500" step="50" oninput="updateValue('DS', 'DSValue'); calculate()">
-                                <span id="DSValue" class="text-sm font-semibold text-indigo-600 w-12 text-right">500</span>
+                                <input type="range" id="DS" oninput="calculate()">
+                                <span id="DSValue" class="text-sm font-semibold text-indigo-600 w-12 text-right"></span>
                             </div>
                         </div>
                     </div>
@@ -102,37 +102,37 @@
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Master Object Count (Millions)</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="MOC" min="1" max="1000" value="100" step="1" oninput="updateValue('MOC', 'MOCValue', 'M'); calculate()">
-                                <span id="MOCValue" class="text-sm font-semibold text-pink-600 w-12 text-right">100M</span>
+                                <input type="range" id="MOC" oninput="calculate()">
+                                <span id="MOCValue" class="text-sm font-semibold text-pink-600 w-12 text-right"></span>
                             </div>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Average Record Size (B)</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="ARS" min="100" max="4096" value="512" step="32" oninput="updateValue('ARS', 'ARSValue', 'B'); calculate()">
-                                <span id="ARSValue" class="text-sm font-semibold text-pink-600 w-12 text-right">512B</span>
+                                <input type="range" id="ARS" oninput="calculate()">
+                                <span id="ARSValue" class="text-sm font-semibold text-pink-600 w-12 text-right"></span>
                             </div>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Avg SI Entries per Object</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="ASEO" min="0.1" max="5" value="1" step="0.1" oninput="updateValue('ASEO', 'ASEOValue'); calculate()">
-                                <span id="ASEOValue" class="text-sm font-semibold text-pink-600 w-8 text-right">1</span>
+                                <input type="range" id="ASEO" oninput="calculate()">
+                                <span id="ASEOValue" class="text-sm font-semibold text-pink-600 w-8 text-right"></span>
                             </div>
                             <p class="text-xs text-gray-500 mt-1">Avg. secondary index entries contributed by a single record.</p>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Number of Secondary Indexes</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="NSI" min="0" max="32" value="5" step="1" oninput="updateValue('NSI', 'NSIValue'); calculate()">
-                                <span id="NSIValue" class="text-sm font-semibold text-pink-600 w-8 text-right">5</span>
+                                <input type="range" id="NSI" oninput="calculate()">
+                                <span id="NSIValue" class="text-sm font-semibold text-pink-600 w-8 text-right"></span>
                             </div>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Tombstone Percentage (%)</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="TP" min="0" max="100" value="10" step="5" oninput="updateValue('TP', 'TPValue', '%'); calculate()">
-                                <span id="TPValue" class="text-sm font-semibold text-pink-600 w-8 text-right">10%</span>
+                                <input type="range" id="TP" oninput="calculate()">
+                                <span id="TPValue" class="text-sm font-semibold text-pink-600 w-8 text-right"></span>
                             </div>
                             <p class="text-xs text-gray-500 mt-1">Percentage of durable deletes affecting index memory footprint.</p>
                         </div>
@@ -149,20 +149,20 @@
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Available Memory per Node (GB)</label>
                             <div class="flex items-center space-x-3">
-                                <input type="range" id="AMPN" min="16" max="256" value="64" step="8" oninput="updateValue('AMPN', 'AMPNValue', 'GB'); calculate()">
-                                <span id="AMPNValue" class="text-sm font-semibold text-teal-600 w-12 text-right">64GB</span>
+                                <input type="range" id="AMPN" oninput="calculate()">
+                                <span id="AMPNValue" class="text-sm font-semibold text-teal-600 w-12 text-right"></span>
                             </div>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Cluster Storage Overhead Pct (Fixed)</label>
                             <div class="flex items-center space-x-3">
-                                <span class="text-sm font-semibold text-teal-600 w-12 text-left">2.4%</span>
+                                <span id="CSOPValue" class="text-sm font-semibold text-teal-600 w-12 text-left"></span>
                             </div>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Overhead Memory Pct (Fixed)</label>
                             <div class="flex items-center space-x-3">
-                                <span class="text-sm font-semibold text-teal-600 w-12 text-left">17.00%</span>
+                                <span id="OMPValue" class="text-sm font-semibold text-teal-600 w-12 text-left"></span>
                             </div>
                         </div>
                     </div>
@@ -250,42 +250,42 @@
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Storage available per cluster (TSAPC)</td>
-                        <td class="px-6 py-4">$$ \text{NPC} \times \text{DPN} \times \text{Device Size} \times (1 - \text{Cluster Storage Overhead Pct}) $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{NPC} \times \text{DPN} \times \text{Device Size} \times (1 - \text{Cluster Storage Overhead Pct}) $$</td>
                         <td class="px-6 py-4">The effective total usable storage capacity after system overhead.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Data Stored (TDS)</td>
-                        <td class="px-6 py-4">$$ \text{Master Object Count} \times \text{Replication Factor} \times \text{Average Record Size (converted to GB)} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{Master Object Count} \times \text{Replication Factor} \times \text{Average Record Size (converted to GB)} $$</td>
                         <td class="px-6 py-4">Total size of user data across the cluster, including replication.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Actual Storage Utilization (ASU)</td>
-                        <td class="px-6 py-4">$$ \text{Total Data Stored} / \text{Total Storage Available per Cluster} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{Total Data Stored} / \text{Total Storage Available per Cluster} $$</td>
                         <td class="px-6 py-4">Ratio of data stored to available capacity. Key for provisioning.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Primary Index Shmem Used (PISU)</td>
-                        <td class="px-6 py-4">$$ \frac{\text{MOC} \times \text{RF} \times 64 \text{ bytes per entry}}{1024^3} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$$ \frac{\text{MOC} \times \text{RF} \times 64 \text{ bytes per entry}}{1024^3} $$</td>
                         <td class="px-6 py-4">Estimated memory for the Primary Index. (64 bytes per PI entry assumed).</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Secondary Index Shmem Used (SISU)</td>
-                        <td class="px-6 py-4">$$ \frac{(\text{MOC} \times \text{RF} \times \text{Avg SI entries per object} \times 21)}{0.75 \times 1024^3} + (\text{Number of SI} \times 16 \text{ MiB to GB}) $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$$ \frac{(\text{MOC} \times \text{RF} \times \text{Avg SI entries per object} \times 21)}{0.75 \times 1024^3} + (\text{Number of SI} \times 16 \text{ MiB to GB}) $$</td>
                         <td class="px-6 py-4">Estimated memory for Secondary Indexes, including entry overhead and per-index overhead.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Used (TMU)</td>
-                        <td class="px-6 py-4">$$ \text{Overhead Memory Required} + \text{PISU} + \text{SISU} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{Overhead Memory Required} + \text{PISU} + \text{SISU} $$</td>
                         <td class="px-6 py-4">Total memory usage without accounting for tombstone overhead.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory w/ Tombstones (TMT)</td>
-                        <td class="px-6 py-4">$$ (\text{PISU} + \text{SISU}) \times (1 + \text{Tombstone Pct}) + \text{Overhead Memory Required} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$$ (\text{PISU} + \text{SISU}) \times (1 + \text{Tombstone Pct}) + \text{Overhead Memory Required} $$</td>
                         <td class="px-6 py-4">Worst-case memory usage, including overhead from durable deletes.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Utilization w/ Tombstones (TMUT)</td>
-                        <td class="px-6 py-4">$$ \text{Total Memory w/ Tombstones} / \text{Available Memory per Cluster} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{Total Memory w/ Tombstones} / \text{Available Memory per Cluster} $$</td>
                         <td class="px-6 py-4">Key performance indicator for memory pressure.</td>
                     </tr>
                 </tbody>
@@ -293,98 +293,165 @@
         </div>
     </div>
 
+    <!-- 2. JAVASCRIPT LOGIC (Modularized Structure) -->
     <script>
-        // Constants
-        const CSOP = 0.024; // Cluster storage overhead pct (2.4%)
-        const OMP = 0.17;   // Overhead memory pct (17.00%)
+        // ===============================================
+        // 2.1 CONFIGURATION DATA (Centralized Management)
+        // ===============================================
+        
+        /**
+         * FIXED CONSTANTS: Values used in formulas that typically do not change
+         */
+        const FIXED_CONSTANTS = {
+            CSOP: 0.024,   // Cluster Storage Overhead Pct (2.4%)
+            OMP: 0.17,     // Overhead Memory Pct (17.00%)
+            PI_ENTRY_SIZE: 64, // bytes per PI entry
+            SI_ENTRY_SIZE: 21, // bytes per SI entry
+            SI_OVERHEAD_MIB: 16, // MiB per secondary index
+            SI_DENSITY_FACTOR: 0.75,
+            BYTES_TO_GB: 1024 ** 3,
+            MIB_TO_GB: 1024
+        };
 
-        // Utility to update slider display values
+        /**
+         * INPUT CONFIG: Defines all slider parameters (min/max/step/default) and their formatting.
+         */
+        const INPUT_CONFIG = {
+            // --- TOPOLOGY ---
+            RF: { min: 1, max: 5, step: 1, default: 2, suffix: '' },
+            NPC: { min: 1, max: 150, step: 1, default: 3, suffix: '' },
+            DPN: { min: 1, max: 32, step: 1, default: 3, suffix: '' },
+            DS: { min: 50, max: 2000, step: 50, default: 100, suffix: 'GB' },
+            
+            // --- WORKLOAD ---
+            MOC: { min: 1, max: 1000, step: 1, default: 100, suffix: 'M' },
+            ARS: { min: 100, max: 4096, step: 64, default: 512, suffix: 'B' },
+            ASEO: { min: 0, max: 5, step: 1, default: 1, suffix: '' },
+            NSI: { min: 0, max: 32, step: 1, default: 3, suffix: '' },
+            TP: { min: 0, max: 100, step: 5, default: 10, suffix: '%' },
+            
+            // --- SERVER SPECS ---
+            AMPN: { min: 16, max: 256, step: 8, default: 64, suffix: 'GB' }
+        };
+
+        // ===============================================
+        // 2.2 CORE CALCULATION LOGIC
+        // ===============================================
+        
+        /**
+         * Reads input parameters from the DOM and performs all capacity calculations.
+         * @returns {Object} Dictionary of calculated metrics.
+         */
+        function calculateCapacity() {
+            // --- Input Parameter Reading ---
+            const inputs = {
+                RF: parseFloat(document.getElementById('RF').value),
+                NPC: parseInt(document.getElementById('NPC').value),
+                DPN: parseInt(document.getElementById('DPN').value),
+                DS: parseFloat(document.getElementById('DS').value),
+                // Convert Millions to raw count
+                MOC: parseFloat(document.getElementById('MOC').value) * 1000000, 
+                ARS: parseFloat(document.getElementById('ARS').value),
+                ASEO: parseFloat(document.getElementById('ASEO').value),
+                NSI: parseInt(document.getElementById('NSI').value),
+                // Convert % to ratio
+                TP: parseFloat(document.getElementById('TP').value) / 100, 
+                AMPN: parseFloat(document.getElementById('AMPN').value),
+            };
+
+            const results = {};
+            
+            // --- INTERNAL CALCULATIONS ---
+
+            // Available memory per cluster (GB) [AMC]
+            results.AMC = inputs.NPC * inputs.AMPN;
+
+            // Overhead memory required per cluster (GB) [OMRC]
+            results.OMRC = results.AMC * FIXED_CONSTANTS.OMP;
+
+            // Primary index shmem used (GB) [PISU]
+            const PISU_BYTES = inputs.MOC * inputs.RF * FIXED_CONSTANTS.PI_ENTRY_SIZE;
+            results.PISU = PISU_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
+
+            // Secondary index shmem used (GB) [SISU]
+            const SI_PART_1_BYTES = (inputs.MOC * inputs.RF * inputs.ASEO * FIXED_CONSTANTS.SI_ENTRY_SIZE) / FIXED_CONSTANTS.SI_DENSITY_FACTOR;
+            const SI_PART_2_GB = inputs.NSI * FIXED_CONSTANTS.SI_OVERHEAD_MIB / FIXED_CONSTANTS.MIB_TO_GB;
+            results.SISU = (SI_PART_1_BYTES / FIXED_CONSTANTS.BYTES_TO_GB) + SI_PART_2_GB; 
+
+            // Total memory used (Base GB) [TMU]
+            results.TMU = results.OMRC + results.PISU + results.SISU;
+            
+            // Total mem + tombstones (GB) [TMT]
+            results.TMT = (results.PISU + results.SISU) * (1 + inputs.TP) + results.OMRC;
+            
+            // --- OUTPUT CALCULATIONS ---
+
+            // Total Storage available per cluster (GB) [TSAPC]
+            results.TSAPC = inputs.NPC * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
+
+            // Total Data Stored (GB) [TDS]
+            const TDS_BYTES = inputs.MOC * inputs.RF * inputs.ARS;
+            results.TDS = TDS_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
+
+            // Actual storage utilization with RF included [ASU]
+            results.ASU = (results.TDS / results.TSAPC) * 100;
+
+            // Total Memory base utilization (GB) [TMBU]
+            results.TMBU = (results.TMU / results.AMC) * 100;
+
+            // Total Memory utilization + tombstones (GB) [TMUT]
+            results.TMUT = (results.TMT / results.AMC) * 100;
+
+            // Total memory available per cluster (GB) [TMAPC] - Same as AMC
+            results.TMAPC = results.AMC;
+            
+            return results;
+        }
+
+        // ===============================================
+        // 2.3 UI & RENDERING LOGIC
+        // ===============================================
+        
+        /**
+         * Updates the text display next to the slider and runs the main calculation.
+         */
+        function calculate() {
+            // Update all slider value displays first
+            for (const id in INPUT_CONFIG) {
+                const config = INPUT_CONFIG[id];
+                updateValue(id, id + 'Value', config.suffix);
+            }
+
+            const results = calculateCapacity();
+            displayResults(results);
+            
+            // Draw topology using the most current inputs
+            const NPC = parseInt(document.getElementById('NPC').value);
+            const DPN = parseInt(document.getElementById('DPN').value);
+            drawTopology(NPC, DPN);
+        }
+
+        /**
+         * Handles the display of the slider value next to the control.
+         */
         function updateValue(id, displayId, suffix = '') {
             let value = document.getElementById(id).value;
             let display = document.getElementById(displayId);
             
-            // Special handling for MOC (Millions)
-            if (id === 'MOC') {
+            if (suffix === 'M') {
                 display.textContent = value + 'M';
+            } else if (suffix === '%') {
+                 display.textContent = value + '%';
             } else {
                 display.textContent = value + suffix;
             }
         }
 
-        // Calculation core function
-        function calculate() {
-            // 1. Get Inputs (converting MOC from Millions)
-            const RF = parseFloat(document.getElementById('RF').value);
-            const NPC = parseInt(document.getElementById('NPC').value);
-            const DPN = parseInt(document.getElementById('DPN').value);
-            const DS = parseFloat(document.getElementById('DS').value);
-            const MOC = parseFloat(document.getElementById('MOC').value) * 1000000; // Convert Millions to raw count
-            const ARS = parseFloat(document.getElementById('ARS').value);
-            const ASEO = parseFloat(document.getElementById('ASEO').value);
-            const NSI = parseInt(document.getElementById('NSI').value);
-            const TP = parseFloat(document.getElementById('TP').value) / 100; // Convert % to ratio
-            const AMPN = parseFloat(document.getElementById('AMPN').value);
-
-            // --- INTERNAL CALCULATIONS ---
-
-            // Available memory per cluster (GB) [AMC]
-            const AMC = NPC * AMPN;
-
-            // Overhead memory required per cluster (GB) [OMRC]
-            const OMRC = AMC * OMP;
-
-            // Primary index shmem used (GB) [PISU]
-            // PISU = (MOC * RF * 64) / (1024^3)
-            const PISU_BYTES = MOC * RF * 64;
-            const PISU = PISU_BYTES / (1024 ** 3); // Convert bytes to GB
-
-            // Secondary index shmem used (GB) [SISU]
-            // SISU = (MOC * RF * ASEO * 21) / 0.75 + (NSI * 16 MiB)
-            const SI_PART_1_BYTES = (MOC * RF * ASEO * 21) / 0.75;
-            const SI_PART_2_GB = NSI * 16 / 1024; // 16 MiB to GB
-            const SISU = (SI_PART_1_BYTES / (1024 ** 3)) + SI_PART_2_GB; // Convert bytes to GB and add MiB part
-
-            // Total mem + tombstones (GB) [TMT]
-            // TMT = (PISU + SISU) * (1 + TP) + OMRC
-            const TMT = (PISU + SISU) * (1 + TP) + OMRC;
+        /**
+         * Formats and displays all calculated results in the output cards.
+         */
+        function displayResults(results) {
             
-            // --- OUTPUT CALCULATIONS ---
-
-            // Total Storage available per cluster (GB) [TSAPC]
-            // TSAPC = NPC * DPN * DS * (1 - CSOP)
-            const TSAPC = NPC * DPN * DS * (1 - CSOP);
-
-            // Total Data Stored (GB) [TDS]
-            // TDS = MOC * RF * ARS / (1024^3)
-            const TDS_BYTES = MOC * RF * ARS;
-            const TDS = TDS_BYTES / (1024 ** 3); // Convert bytes to GB
-
-            // Actual storage utilization with RF included [ASU]
-            // ASU = TDS / TSAPC * 100
-            const ASU = (TDS / TSAPC) * 100;
-
-            // Total memory used (GB) [TMU]
-            // TMU = OMRC + PISU + SISU
-            const TMU = OMRC + PISU + SISU;
-
-            // Total Memory base utilization (GB) [TMBU]
-            // TMBU = TMU / AMC * 100
-            const TMBU = (TMU / AMC) * 100;
-
-            // Total Memory utilization + tombstones (GB) [TMUT]
-            // TMUT = TMT / AMC * 100
-            const TMUT = (TMT / AMC) * 100;
-
-            // --- DISPLAY RESULTS ---
-            
-            // Helper function for styling bars
-            const getBarColor = (utilization) => {
-                if (utilization > 90) return 'bg-red-600';
-                if (utilization > 75) return 'bg-orange-500';
-                if (utilization > 50) return 'bg-yellow-500';
-                return 'bg-green-600';
-            };
-
             const formatPct = (value) => {
                 return isNaN(value) || !isFinite(value) ? 'N/A' : (value > 1000 ? '>1000' : value.toFixed(2)) + '%';
             };
@@ -393,43 +460,42 @@
                 return isNaN(value) || !isFinite(value) ? 'N/A' : value.toFixed(2);
             };
 
-            // 1. ASU
-            document.getElementById('ASUResult').textContent = formatPct(ASU);
-            let asuWidth = Math.min(100, ASU);
-            const ASUBar = document.getElementById('ASUBar');
-            ASUBar.style.width = asuWidth + '%';
-            ASUBar.className = `h-2.5 rounded-full ${getBarColor(ASU)}`;
-
-            document.getElementById('TDSResult').textContent = formatGB(TDS);
-            document.getElementById('TSAPCResult').textContent = formatGB(TSAPC);
-
-
-            // 2. TMBU
-            document.getElementById('TMBUResult').textContent = formatPct(TMBU);
-            let tmbuWidth = Math.min(100, TMBU);
-            const TMBUBar = document.getElementById('TMBUBar');
-            TMBUBar.style.width = tmbuWidth + '%';
-            TMBUBar.className = `h-2.5 rounded-full ${getBarColor(TMBU)}`;
+            const getBarColor = (utilization) => {
+                if (utilization > 90) return 'bg-red-600';
+                if (utilization > 75) return 'bg-orange-500';
+                if (utilization > 50) return 'bg-yellow-500';
+                return 'bg-green-600';
+            };
             
-            document.getElementById('TMUResult').textContent = formatGB(TMU);
-            document.getElementById('TMAPCResult').textContent = formatGB(AMC);
+            // Helper to update the bar and result text
+            const updateMetric = (metric, resultId, barId, colorFunc) => {
+                const value = results[metric];
+                document.getElementById(resultId).textContent = formatPct(value);
+                let width = Math.min(100, value);
+                const bar = document.getElementById(barId);
+                bar.style.width = width + '%';
+                bar.className = `h-2.5 rounded-full ${colorFunc(value)}`;
+            };
 
+            // 1. ASU (Storage)
+            updateMetric('ASU', 'ASUResult', 'ASUBar', getBarColor);
+            document.getElementById('TDSResult').textContent = formatGB(results.TDS);
+            document.getElementById('TSAPCResult').textContent = formatGB(results.TSAPC);
 
-            // 3. TMUT
-            document.getElementById('TMUTResult').textContent = formatPct(TMUT);
-            let tmutWidth = Math.min(100, TMUT);
-            const TMUTBar = document.getElementById('TMUTBar');
-            TMUTBar.style.width = tmutWidth + '%';
-            TMUTBar.className = `h-2.5 rounded-full ${getBarColor(TMUT)}`;
-            
-            document.getElementById('TMTResult').textContent = formatGB(TMT);
-            document.getElementById('AMCResult').textContent = formatGB(AMC); // Same as TMAPC
-            
-            // 4. Update Topology Diagram
-            drawTopology(NPC, DPN);
+            // 2. TMBU (Memory Base)
+            updateMetric('TMBU', 'TMBUResult', 'TMBUBar', getBarColor);
+            document.getElementById('TMUResult').textContent = formatGB(results.TMU);
+            document.getElementById('TMAPCResult').textContent = formatGB(results.TMAPC);
+
+            // 3. TMUT (Memory w/ Tombstones)
+            updateMetric('TMUT', 'TMUTResult', 'TMUTBar', getBarColor);
+            document.getElementById('TMTResult').textContent = formatGB(results.TMT);
+            document.getElementById('AMCResult').textContent = formatGB(results.AMC);
         }
-
-        // Function to draw the dynamic SVG topology
+        
+        /**
+         * Draws the dynamic SVG topology diagram. (Unchanged for clarity)
+         */
         function drawTopology(NPC, DPN) {
             const svg = document.getElementById('topologySvg');
             svg.innerHTML = ''; // Clear previous content
@@ -531,23 +597,37 @@
             }
         }
 
-        // Initialize on load
-        window.onload = function() {
-            // Initialize slider displays
-            updateValue('RF', 'RFValue');
-            updateValue('NPC', 'NPCValue');
-            updateValue('DPN', 'DPNValue');
-            updateValue('DS', 'DSValue');
-            updateValue('MOC', 'MOCValue', 'M');
-            updateValue('ARS', 'ARSValue', 'B');
-            updateValue('ASEO', 'ASEOValue');
-            updateValue('NSI', 'NSIValue');
-            updateValue('TP', 'TPValue', '%');
-            updateValue('AMPN', 'AMPNValue', 'GB');
+        /**
+         * Initializes all slider properties (min/max/step/value) from INPUT_CONFIG
+         * and displays fixed constants.
+         */
+        function initializeInputs() {
+            // 1. Initialize sliders from INPUT_CONFIG
+            for (const id in INPUT_CONFIG) {
+                const config = INPUT_CONFIG[id];
+                const inputElement = document.getElementById(id);
+                if (inputElement) {
+                    inputElement.min = config.min;
+                    inputElement.max = config.max;
+                    inputElement.step = config.step;
+                    inputElement.value = config.default;
+                }
+            }
 
-            // Perform initial calculation and drawing
+            // 2. Display fixed constants
+            document.getElementById('CSOPValue').textContent = (FIXED_CONSTANTS.CSOP * 100).toFixed(2) + '%';
+            document.getElementById('OMPValue').textContent = (FIXED_CONSTANTS.OMP * 100).toFixed(2) + '%';
+            
+            // 3. Run initial calculation
             calculate();
-        };
+        }
+
+        // ===============================================
+        // 2.4 INITIALIZATION
+        // ===============================================
+
+        // Run the initialization function once the page is fully loaded.
+        window.onload = initializeInputs;
 
     </script>
 </body>
