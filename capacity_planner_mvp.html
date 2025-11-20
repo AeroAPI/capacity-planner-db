@@ -50,17 +50,17 @@
 </head>
 <body class="p-8">
 
-    <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">Distributed DB Capacity Planner</h1>
+    <div class="max-w-7xl mx-auto space-y-12">
+        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Distributed DB Capacity Planner</h1>
         
-        <div class="flex flex-col lg:flex-row gap-8">
-            
-            <!-- LEFT COLUMN: INPUTS -->
-            <div class="lg:w-1/2 space-y-6">
-                <h2 class="text-xl font-semibold text-indigo-700 mb-4">1. System & Workload Configuration</h2>
+        <!-- ROW 1: SECTION 1 (Inputs - Full Width) -->
+        <div class="w-full">
+            <h2 class="text-xl font-semibold text-indigo-700 mb-6">1. System & Workload Configuration</h2>
+
+            <div class="flex flex-col lg:flex-row gap-6">
 
                 <!-- Sub-panel: Topology -->
-                <div class="card bg-white p-6 rounded-xl border border-indigo-200">
+                <div class="lg:w-1/3 card bg-white p-6 rounded-xl border border-indigo-200">
                     <h3 class="text-lg font-bold text-indigo-800 mb-4 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                         Topology
@@ -97,11 +97,11 @@
                     </div>
                 </div>
 
-                <!-- Sub-panel: Workload -->
-                <div class="card bg-white p-6 rounded-xl border border-pink-200">
+                <!-- Sub-panel: Workload & Failure Input (Combined) -->
+                <div class="lg:w-1/3 card bg-white p-6 rounded-xl border border-pink-200">
                     <h3 class="text-lg font-bold text-pink-800 mb-4 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-pink-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3zm2 2v10h10V5H5z" clip-rule="evenodd"></path></svg>
-                        Workload
+                        Workload & Resilience Inputs
                     </h3>
                     <div class="space-y-4">
                         <div class="input-group">
@@ -124,7 +124,6 @@
                                 <input type="range" id="ASEO" oninput="calculate()">
                                 <span id="ASEOValue" class="text-sm font-semibold text-pink-600 w-8 text-right"></span>
                             </div>
-                            <p class="text-xs text-gray-500 mt-1">Avg. secondary index entries contributed by a single record.</p>
                         </div>
                         <div class="input-group">
                             <label class="block text-sm font-medium text-gray-700">Number of Secondary Indexes</label>
@@ -133,19 +132,25 @@
                                 <span id="NSIValue" class="text-sm font-semibold text-pink-600 w-8 text-right"></span>
                             </div>
                         </div>
-                        <div class="input-group">
+                        <div class="input-group border-t pt-4 mt-4 border-pink-100">
                             <label class="block text-sm font-medium text-gray-700">Tombstone Percentage (%)</label>
                             <div class="flex items-center space-x-3">
                                 <input type="range" id="TP" oninput="calculate()">
                                 <span id="TPValue" class="text-sm font-semibold text-pink-600 w-8 text-right"></span>
                             </div>
-                            <p class="text-xs text-gray-500 mt-1">Percentage of durable deletes affecting index memory footprint.</p>
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700">Nodes Lost (Failure Scenario)</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="range" id="NODES_LOST" oninput="calculate()">
+                                <span id="NODES_LOSTValue" class="text-sm font-semibold text-purple-600 w-8 text-right"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Sub-panel: Server Specs & Overhead -->
-                <div class="card bg-white p-6 rounded-xl border border-teal-200">
+                <div class="lg:w-1/3 card bg-white p-6 rounded-xl border border-teal-200">
                     <h3 class="text-lg font-bold text-teal-800 mb-4 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm1 2h10v2H5V6zm0 4h10v2H5v-2zm0 4h10v2H5v-2z"></path></svg>
                         Server Specs & Overhead
@@ -173,11 +178,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <!-- ROW 2: SECTIONS 2 & 3 (Outputs - Side by Side) -->
+        <div class="flex flex-col lg:flex-row gap-8">
 
-            <!-- RIGHT COLUMN: OUTPUTS & VISUALS -->
+            <!-- LEFT COLUMN: SECTION 2 (HEALTHY CLUSTER) -->
             <div class="lg:w-1/2 space-y-6">
-                
-                <!-- SECTION 2: HEALTHY CLUSTER ANALYSIS -->
                 <h2 class="text-xl font-semibold text-green-700 mb-4">2. Capacity Analysis (Healthy Cluster)</h2>
                 <div class="space-y-4">
 
@@ -225,11 +232,13 @@
                             <p>Available Memory per Cluster (GB): <span id="AMCResult" class="font-semibold text-gray-800">0.00</span></p>
                         </div>
                     </div>
-
                 </div>
-                
-                <!-- SECTION 3: FAILURE SCENARIO ANALYSIS (NEW) -->
-                <h2 class="text-xl font-semibold text-purple-700 mt-8 mb-4">3. Capacity Analysis (Failure Scenario)</h2>
+            </div>
+            
+            <!-- RIGHT COLUMN: SECTION 3 (FAILURE SCENARIO) -->
+            <div class="lg:w-1/2 space-y-6">
+                <!-- Failure Input Panel moved up here -->
+                <h2 class="text-xl font-semibold text-purple-700 mb-4">3. Capacity Analysis (Failure Scenario)</h2>
                 
                 <!-- Failure Input Panel -->
                 <div class="card bg-white p-6 rounded-xl border border-purple-200 space-y-4 mb-6">
@@ -294,76 +303,73 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- SECTION 4: CALCULATIONS AND DEFINITIONS (RENUMBERED) -->
-                <h2 class="text-xl font-semibold text-gray-700 mt-12 mb-4 border-t pt-4">4. Calculations and Definitions</h2>
-                <div class="bg-white p-6 rounded-xl card overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 tight-table">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metric</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Formula Used</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 text-sm">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Available Memory per Cluster (AMC)</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Available Memory per Node</td>
-                                <td class="px-6 py-4">Total available RAM across all nodes in the cluster.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Storage available per cluster (TSAPC)</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Devices per Node × Device Size × (1 - Cluster Storage Overhead Pct)</td>
-                                <td class="px-6 py-4">The effective total usable storage capacity after system overhead.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Data Stored (TDS)</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Master Object Count × Replication Factor × Average Record Size (B) / 1024^3</td>
-                                <td class="px-6 py-4">Total size of user data across the cluster, including replication.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Actual Storage Utilization (ASU)</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Total Data Stored (TDS) / Total Storage Available (TSAPC)</td>
-                                <td class="px-6 py-4">Ratio of data stored to available capacity. Key for provisioning.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Primary Index Shmem Used (PISU)</td>
-                                <td class="px-6 py-4 whitespace-nowrap">(Master Object Count × Replication Factor × 64 bytes) / 1024^3</td>
-                                <td class="px-6 py-4">Estimated memory for the Primary Index. (64 bytes per PI entry assumed).</td>
-                            
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Secondary Index Shmem Used (SISU)</td>
-                                <td class="px-6 py-4 whitespace-nowrap">(MOC × RF × Avg SI entries × 21 bytes / 0.75) / 1024^3 + (Number of SI × 16 MiB / 1024)</td>
-                                <td class="px-6 py-4">Estimated memory for Secondary Indexes, including entry overhead and per-index overhead.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Used (TMU)</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Overhead Memory Required (OMRC) + PISU + SISU</td>
-                                <td class="px-6 py-4">Total memory usage without accounting for tombstone overhead.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory w/ Tombstones (TMT)</td>
-                                <td class="px-6 py-4 whitespace-nowrap">(PISU + SISU) × (1 + Tombstone Pct) + Overhead Memory Required (OMRC)</td>
-                                <td class="px-6 py-4">Worst-case memory usage, including overhead from durable deletes.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Utilization w/ Tombstones (TMUT)</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Total Memory w/ Tombstones (TMT) / Available Memory per Cluster (AMC)</td>
-                                <td class="px-6 py-4">Key performance indicator for memory pressure.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- SECTION 3 (OLD): TOPOLOGY DIAGRAM (REMOVED) -->
-                <div style="display:none;" id="topologyDiagramContainer">
-                    <!-- The SVG drawing logic still exists in JS but this container is hidden/removed -->
-                </div>
-
             </div>
         </div>
+        
+        <!-- ROW 3: SECTION 4 (Calculations - Full Width) -->
+        <div class="w-full space-y-6">
+            <h2 class="text-xl font-semibold text-gray-700 mt-12 mb-4 border-t pt-4">4. Calculations and Definitions</h2>
+            <div class="bg-white p-6 rounded-xl card overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 tight-table">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metric</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Formula Used</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 text-sm">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Available Memory per Cluster (AMC)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Available Memory per Node</td>
+                            <td class="px-6 py-4">Total available RAM across all nodes in the cluster.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Storage available per cluster (TSAPC)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Devices per Node × Device Size × (1 - Cluster Storage Overhead Pct)</td>
+                            <td class="px-6 py-4">The effective total usable storage capacity after system overhead.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Data Stored (TDS)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Master Object Count × Replication Factor × Average Record Size (B) / 1024^3</td>
+                            <td class="px-6 py-4">Total size of user data across the cluster, including replication.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Actual Storage Utilization (ASU)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total Data Stored (TDS) / Total Storage Available (TSAPC)</td>
+                            <td class="px-6 py-4">Ratio of data stored to available capacity. Key for provisioning.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Primary Index Shmem Used (PISU)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">(Master Object Count × Replication Factor × 64 bytes) / 1024^3</td>
+                            <td class="px-6 py-4">Estimated memory for the Primary Index. (64 bytes per PI entry assumed).</td>
+                        
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Secondary Index Shmem Used (SISU)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">(MOC × RF × Avg SI entries × 21 bytes / 0.75) / 1024^3 + (Number of SI × 16 MiB / 1024)</td>
+                            <td class="px-6 py-4">Estimated memory for Secondary Indexes, including entry overhead and per-index overhead.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Used (TMU)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Overhead Memory Required (OMRC) + PISU + SISU</td>
+                            <td class="px-6 py-4">Total memory usage without accounting for tombstone overhead.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory w/ Tombstones (TMT)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">(PISU + SISU) × (1 + Tombstone Pct) + Overhead Memory Required (OMRC)</td>
+                            <td class="px-6 py-4">Worst-case memory usage, including overhead from durable deletes.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Utilization w/ Tombstones (TMUT)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total Memory w/ Tombstones (TMT) / Available Memory per Cluster (AMC)</td>
+                            <td class="px-6 py-4">Key performance indicator for memory pressure.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <!-- 2. JAVASCRIPT LOGIC (Modularized Structure) -->
     <script>
@@ -438,9 +444,9 @@
 
             const results = {};
             
-            // --- 2.2.1 HEALTHY CLUSTER CALCULATIONS ---
+            // --- 2.2.1 COMMON CALCULATIONS ---
             
-            // Total Available Memory per Cluster
+            // Total Available Memory per Cluster (Healthy)
             results.AMC = inputs.NPC * inputs.AMPN;
 
             // Overhead memory required per cluster (OMRC)
@@ -450,189 +456,4 @@
             const PISU_BYTES = inputs.MOC * inputs.RF * FIXED_CONSTANTS.PI_ENTRY_SIZE;
             results.PISU = PISU_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
 
-            const SI_PART_1_BYTES = (inputs.MOC * inputs.RF * inputs.ASEO * FIXED_CONSTANTS.SI_ENTRY_SIZE) / FIXED_CONSTANTS.SI_DENSITY_FACTOR;
-            const SI_PART_2_GB = inputs.NSI * FIXED_CONSTANTS.SI_OVERHEAD_MIB / FIXED_CONSTANTS.MIB_TO_GB;
-            results.SISU = (SI_PART_1_BYTES / FIXED_CONSTANTS.BYTES_TO_GB) + SI_PART_2_GB; 
-
-            // Total memory used (Base GB) [TMU]
-            results.TMU = results.OMRC + results.PISU + results.SISU;
-            
-            // Total mem + tombstones (GB) [TMT]
-            results.TMT = (results.PISU + results.SISU) * (1 + inputs.TP) + results.OMRC;
-            
-            // Total Storage available per cluster (GB) [TSAPC]
-            results.TSAPC = inputs.NPC * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
-
-            // Total Data Stored (GB) [TDS]
-            const TDS_BYTES = inputs.MOC * inputs.RF * inputs.ARS;
-            results.TDS = TDS_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
-
-            // HEALTHY Cluster Utilization
-            results.ASU = (results.TDS / results.TSAPC) * 100;
-            results.TMBU = (results.TMU / results.AMC) * 100;
-            results.TMUT = (results.TMT / results.AMC) * 100;
-            results.TMAPC = results.AMC; // Total Available Memory
-
-            // --- 2.2.2 FAILURE SCENARIO CALCULATIONS (Placeholder for next step) ---
-            
-            const effectiveNodes = Math.max(0, inputs.NPC - inputs.NODES_LOST);
-            
-            // 1. Failure Available Capacity (Storage and Memory decrease)
-            results.Fail_TSAPC = effectiveNodes * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
-            results.Fail_AMC = effectiveNodes * inputs.AMPN;
-            
-            // 2. Utilization Recalculation (Data Stored and Index Used remain constant, capacity shrinks)
-            results.Fail_ASU = (results.TDS / results.Fail_TSAPC) * 100;
-            results.Fail_TMBU = (results.TMU / results.Fail_AMC) * 100;
-            results.Fail_TMUT = (results.TMT / results.Fail_AMC) * 100;
-
-            return results;
-        }
-
-        // ===============================================
-        // 2.3 UI & RENDERING LOGIC
-        // ===============================================
-        
-        /**
-         * Main function triggered by all slider inputs.
-         */
-        function calculate() {
-            // Update all slider value displays first
-            for (const id in INPUT_CONFIG) {
-                const config = INPUT_CONFIG[id];
-                updateValue(id, id + 'Value', config.suffix);
-            }
-
-            const results = calculateCapacity();
-            displayResults(results);
-        }
-
-        /**
-         * Handles the display of the slider value next to the control.
-         */
-        function updateValue(id, displayId, suffix = '') {
-            let value = document.getElementById(id).value;
-            let display = document.getElementById(displayId);
-            
-            if (suffix === 'B') {
-                display.textContent = value + 'B';
-            } else if (suffix === '%') {
-                 display.textContent = value + '%';
-            } else {
-                display.textContent = value + suffix;
-            }
-        }
-
-        /**
-         * Formats and displays all calculated results in the output cards.
-         */
-        function displayResults(results) {
-            
-            const formatPct = (value) => {
-                return isNaN(value) || !isFinite(value) ? 'N/A' : (value > 1000 ? '>1000' : value.toFixed(2)) + '%';
-            };
-
-            const formatGB = (value) => {
-                return isNaN(value) || !isFinite(value) ? 'N/A' : value.toFixed(2);
-            };
-
-            // Used for HEALTHY cluster
-            const getBarColorHealthy = (utilization) => {
-                if (utilization > 90) return 'bg-red-600';
-                if (utilization > 75) return 'bg-orange-500';
-                if (utilization > 50) return 'bg-yellow-500';
-                return 'bg-green-600';
-            };
-            
-            // Used for FAILURE cluster (always highlights risk)
-            const getBarColorFail = (utilization) => {
-                if (utilization > 100) return 'bg-red-700';
-                if (utilization > 90) return 'bg-red-600';
-                if (utilization > 75) return 'bg-orange-500';
-                return 'bg-red-400';
-            };
-
-            // Helper to update the bar and result text
-            const updateMetric = (metric, resultId, barId, colorFunc, rawValue, rawId) => {
-                const value = results[metric];
-                document.getElementById(resultId).textContent = formatPct(value);
-                let width = Math.min(100, value);
-                const bar = document.getElementById(barId);
-                bar.style.width = width + '%';
-                bar.className = `h-2.5 rounded-full ${colorFunc(value)}`;
-                
-                if (rawId && rawValue !== undefined) {
-                    document.getElementById(rawId).textContent = formatGB(results[rawValue]);
-                }
-            };
-            
-            // --- HEALTHY CLUSTER OUTPUT (SECTION 2) ---
-
-            // ASU
-            updateMetric('ASU', 'ASUResult', 'ASUBar', getBarColorHealthy);
-            document.getElementById('TDSResult').textContent = formatGB(results.TDS);
-            document.getElementById('TSAPCResult').textContent = formatGB(results.TSAPC);
-
-            // TMBU
-            updateMetric('TMBU', 'TMBUResult', 'TMBUBar', getBarColorHealthy);
-            document.getElementById('TMUResult').textContent = formatGB(results.TMU);
-            document.getElementById('TMAPCResult').textContent = formatGB(results.TMAPC);
-
-            // TMUT
-            updateMetric('TMUT', 'TMUTResult', 'TMUTBar', getBarColorHealthy);
-            document.getElementById('TMTResult').textContent = formatGB(results.TMT);
-            document.getElementById('AMCResult').textContent = formatGB(results.AMC);
-            
-            // --- FAILURE CLUSTER OUTPUT (SECTION 3) ---
-
-            // ASU Fail
-            updateMetric('Fail_ASU', 'ASU_FailResult', 'ASU_FailBar', getBarColorFail);
-            document.getElementById('TDS_FailResult').textContent = formatGB(results.TDS); 
-            document.getElementById('TSAPC_FailResult').textContent = formatGB(results.Fail_TSAPC);
-
-            // TMBU Fail
-            updateMetric('Fail_TMBU', 'TMBU_FailResult', 'TMBU_FailBar', getBarColorFail);
-            document.getElementById('TMU_FailResult').textContent = formatGB(results.TMU); 
-            document.getElementById('TMAPC_FailResult').textContent = formatGB(results.Fail_AMC);
-
-            // TMUT Fail
-            updateMetric('Fail_TMUT', 'TMUT_FailResult', 'TMUT_FailBar', getBarColorFail);
-            document.getElementById('TMT_FailResult').textContent = formatGB(results.TMT); 
-            document.getElementById('AMC_FailResult').textContent = formatGB(results.Fail_AMC); 
-        }
-        
-        /**
-         * Initializes all slider properties (min/max/step/value) from INPUT_CONFIG
-         * and displays fixed constants.
-         */
-        function initializeInputs() {
-            // 1. Initialize sliders from INPUT_CONFIG
-            for (const id in INPUT_CONFIG) {
-                const config = INPUT_CONFIG[id];
-                const inputElement = document.getElementById(id);
-                if (inputElement) {
-                    inputElement.min = config.min;
-                    inputElement.max = config.max;
-                    inputElement.step = config.step;
-                    inputElement.value = config.default;
-                }
-            }
-
-            // 2. Display fixed constants
-            document.getElementById('CSOPValue').textContent = (FIXED_CONSTANTS.CSOP * 100).toFixed(2) + '%';
-            document.getElementById('OMPValue').textContent = (FIXED_CONSTANTS.OMP * 100).toFixed(2) + '%';
-            
-            // 3. Run initial calculation
-            calculate();
-        }
-
-        // ===============================================
-        // 2.4 INITIALIZATION
-        // ===============================================
-
-        // Run the initialization function once the page is fully loaded.
-        window.onload = initializeInputs;
-
-    </script>
-</body>
-</html>
+            const SI_PART_1_BYTES = (inputs
