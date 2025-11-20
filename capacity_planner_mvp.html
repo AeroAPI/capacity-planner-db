@@ -41,6 +41,10 @@
             border: 2px solid #fff;
             box-shadow: 0 0 4px rgba(0,0,0,0.2);
         }
+        .tight-table td, .tight-table th {
+    padding-top: 0.5rem; /* Adjust padding-top */
+    padding-bottom: 0.5rem; /* Adjust padding-bottom */
+}
     </style>
 </head>
 <body class="p-8">
@@ -234,7 +238,7 @@
         <!-- SECTION 4: CALCULATIONS AND DEFINITIONS -->
         <h2 class="text-xl font-semibold text-gray-700 mt-12 mb-4 border-t pt-4">4. Calculations and Definitions</h2>
         <div class="bg-white p-6 rounded-xl card overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 tight-table">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metric</th>
@@ -245,47 +249,47 @@
                 <tbody class="divide-y divide-gray-200 text-sm">
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Available Memory per Cluster (AMC)</td>
-                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{Nodes per Cluster} \times \text{Available Memory per Node} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Available Memory per Node</td>
                         <td class="px-6 py-4">Total available RAM across all nodes in the cluster.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Storage available per cluster (TSAPC)</td>
-                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{NPC} \times \text{DPN} \times \text{Device Size} \times (1 - \text{Cluster Storage Overhead Pct}) $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Devices per Node × Device Size × (1 - Cluster Storage Overhead Pct)</td>
                         <td class="px-6 py-4">The effective total usable storage capacity after system overhead.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Data Stored (TDS)</td>
-                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{Master Object Count} \times \text{Replication Factor} \times \text{Average Record Size (converted to GB)} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Master Object Count × Replication Factor × Average Record Size (B) / 1024^3</td>
                         <td class="px-6 py-4">Total size of user data across the cluster, including replication.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Actual Storage Utilization (ASU)</td>
-                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{Total Data Stored} / \text{Total Storage Available per Cluster} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Total Data Stored (TDS) / Total Storage Available (TSAPC)</td>
                         <td class="px-6 py-4">Ratio of data stored to available capacity. Key for provisioning.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Primary Index Shmem Used (PISU)</td>
-                        <td class="px-6 py-4 whitespace-nowrap">$$ \frac{\text{MOC} \times \text{RF} \times 64 \text{ bytes per entry}}{1024^3} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">(Master Object Count × Replication Factor × 64 bytes) / 1024^3</td>
                         <td class="px-6 py-4">Estimated memory for the Primary Index. (64 bytes per PI entry assumed).</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Secondary Index Shmem Used (SISU)</td>
-                        <td class="px-6 py-4 whitespace-nowrap">$$ \frac{(\text{MOC} \times \text{RF} \times \text{Avg SI entries per object} \times 21)}{0.75 \times 1024^3} + (\text{Number of SI} \times 16 \text{ MiB to GB}) $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">(MOC × RF × Avg SI entries × 21 bytes / 0.75) / 1024^3 + (Number of SI × 16 MiB / 1024)</td>
                         <td class="px-6 py-4">Estimated memory for Secondary Indexes, including entry overhead and per-index overhead.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Used (TMU)</td>
-                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{Overhead Memory Required} + \text{PISU} + \text{SISU} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Overhead Memory Required (OMRC) + PISU + SISU</td>
                         <td class="px-6 py-4">Total memory usage without accounting for tombstone overhead.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory w/ Tombstones (TMT)</td>
-                        <td class="px-6 py-4 whitespace-nowrap">$$ (\text{PISU} + \text{SISU}) \times (1 + \text{Tombstone Pct}) + \text{Overhead Memory Required} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">(PISU + SISU) × (1 + Tombstone Pct) + Overhead Memory Required (OMRC)</td>
                         <td class="px-6 py-4">Worst-case memory usage, including overhead from durable deletes.</td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Utilization w/ Tombstones (TMUT)</td>
-                        <td class="px-6 py-4 whitespace-nowrap">$$ \text{Total Memory w/ Tombstones} / \text{Available Memory per Cluster} $$</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Total Memory w/ Tombstones (TMT) / Available Memory per Cluster (AMC)</td>
                         <td class="px-6 py-4">Key performance indicator for memory pressure.</td>
                     </tr>
                 </tbody>
