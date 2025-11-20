@@ -581,11 +581,17 @@
             // Helper to update the bar and result text
             const updateMetric = (metric, resultId, barId, colorFunc) => {
                 const value = results[metric];
-                document.getElementById(resultId).textContent = formatPct(value);
-                let width = Math.min(100, value);
-                const bar = document.getElementById(barId);
-                bar.style.width = width + '%';
-                bar.className = `h-2.5 rounded-full ${colorFunc(value)}`;
+                // Check if element exists before setting content/style
+                const resultEl = document.getElementById(resultId);
+                const barEl = document.getElementById(barId);
+                
+                if (resultEl) resultEl.textContent = formatPct(value);
+                
+                if (barEl) {
+                    let width = Math.min(100, value);
+                    barEl.style.width = width + '%';
+                    barEl.className = `h-2.5 rounded-full ${colorFunc(value)}`;
+                }
             };
             
             // --- HEALTHY CLUSTER OUTPUT (SECTION 2) ---
