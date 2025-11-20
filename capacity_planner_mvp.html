@@ -51,7 +51,7 @@
 <body class="p-8">
 
     <div class="max-w-7xl mx-auto space-y-12">
-        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Distributed DB Capacity Planner</h1>
+        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Aerospike Capacity Planner (namespace sizing)</h1>
         
         <!-- ROW 1: SECTION 1 (Inputs - Full Width) -->
         <div class="w-full">
@@ -423,16 +423,16 @@
          * Safely retrieves input value, defaulting to 0 or config default if element is missing.
          */
         const getInputValue = (id, numeric = true) => {
-            const el = document.getElementById(id);
-            const config = INPUT_CONFIG[id] || {};
-            let value = config.default || 0; // Use config default as base fallback
-            
-            if (el && el.value !== undefined) {
-                value = el.value;
-            }
-            
-            return numeric ? parseFloat(value) : value;
-        };
+    const el = document.getElementById(id);
+    const config = INPUT_CONFIG[id] || {};
+    let value = config.default || 0; // Use config default as base fallback
+    
+    if (el && el.value !== undefined) {
+        value = el.value;
+    }
+    
+    return numeric ? parseFloat(value) : value;
+};
 
         /**
          * Reads input parameters from the DOM and performs all capacity calculations.
@@ -630,29 +630,32 @@
          * Initializes all slider properties (min/max/step/value) from INPUT_CONFIG
          * and displays fixed constants.
          */
-        function initializeInputs() {
-            // 1. Initialize sliders from INPUT_CONFIG
-            for (const id in INPUT_CONFIG) {
-                const config = INPUT_CONFIG[id];
-                const inputElement = document.getElementById(id);
-                if (inputElement) {
-                    inputElement.min = config.min;
-                    inputElement.max = config.max;
-                    inputElement.step = config.step;
-                    inputElement.value = config.default;
-                }
-            }
-
-            // 2. Display fixed constants
-            const csopEl = document.getElementById('CSOPValue');
-            if(csopEl) csopEl.textContent = (FIXED_CONSTANTS.CSOP * 100).toFixed(2) + '%';
+   function initializeInputs() {
+    // 1. Initialize sliders from INPUT_CONFIG
+    for (const id in INPUT_CONFIG) {
+        const config = INPUT_CONFIG[id];
+        const inputElement = document.getElementById(id);
+        if (inputElement) {
+            inputElement.min = config.min;
+            inputElement.max = config.max;
+            inputElement.step = config.step;
+            inputElement.value = config.default;
             
-            const ompEl = document.getElementById('OMPValue');
-            if(ompEl) ompEl.textContent = (FIXED_CONSTANTS.OMP * 100).toFixed(2) + '%';
-            
-            // 3. Run initial calculation
-            calculate();
+            // --- FIX APPLIED HERE: Manually update the display span immediately ---
+            updateValue(id, id + 'Value', config.suffix); 
         }
+    }
+
+    // 2. Display fixed constants
+    const csopEl = document.getElementById('CSOPValue');
+    if(csopEl) csopEl.textContent = (FIXED_CONSTANTS.CSOP * 100).toFixed(2) + '%';
+    
+    const ompEl = document.getElementById('OMPValue');
+    if(ompEl) ompEl.textContent = (FIXED_CONSTANTS.OMP * 100).toFixed(2) + '%';
+    
+    // 3. Run initial calculation
+    calculate();
+}
 
         // ===============================================
         // 2.4 INITIALIZATION
