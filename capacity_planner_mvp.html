@@ -94,14 +94,24 @@
                                 <span id="DSValue" class="text-sm font-semibold text-indigo-600 w-12 text-right"></span>
                             </div>
                         </div>
+                        <!-- MOVED: NODES LOST slider to Topology -->
+<hr class="border-indigo-200 mt-4 mb-4" /> 
+<div class="input-group"> 
+    <label class="block text-sm font-medium text-gray-700">Nodes Lost (Failure Scenario)</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="range" id="NODES_LOST" oninput="calculate()">
+                                <span id="NODES_LOSTValue" class="text-sm font-semibold text-purple-600 w-8 text-right"></span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Max value constrained by Nodes per Cluster (NPC).</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Sub-panel: Workload & Failure Input (Combined) -->
+                <!-- Sub-panel: Workload & Resilience Inputs (Now just Workload) -->
                 <div class="lg:w-1/3 card bg-white p-6 rounded-xl border border-pink-200">
                     <h3 class="text-lg font-bold text-pink-800 mb-4 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-pink-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3zm2 2v10h10V5H5z" clip-rule="evenodd"></path></svg>
-                        Workload & Resilience Inputs
+                        Workload Inputs
                     </h3>
                     <div class="space-y-4">
                         <div class="input-group">
@@ -137,13 +147,6 @@
                             <div class="flex items-center space-x-3">
                                 <input type="range" id="TP" oninput="calculate()">
                                 <span id="TPValue" class="text-sm font-semibold text-pink-600 w-8 text-right"></span>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <label class="block text-sm font-medium text-gray-700">Nodes Lost (Failure Scenario)</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="range" id="NODES_LOST" oninput="calculate()">
-                                <span id="NODES_LOSTValue" class="text-sm font-semibold text-purple-600 w-8 text-right"></span>
                             </div>
                         </div>
                     </div>
@@ -239,21 +242,7 @@
             <div class="lg:w-1/2 space-y-6">
                 <h2 class="text-xl font-semibold text-purple-700 mb-4">3. Capacity Analysis (Failure Scenario)</h2>
                 
-                <!-- Failure Input Panel -->
-                <div class="card bg-white p-6 rounded-xl border border-purple-200 space-y-4 mb-6">
-                    <h3 class="text-lg font-bold text-purple-800 mb-4 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
-                        Simulate Failure
-                    </h3>
-                    <div class="input-group">
-                        <label class="block text-sm font-medium text-gray-700">Nodes Lost (N-1 Scenario)</label>
-                        <div class="flex items-center space-x-3">
-                            <input type="range" id="NODES_LOST" oninput="calculate()">
-                            <span id="NODES_LOSTValue" class="text-sm font-semibold text-purple-600 w-8 text-right"></span>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1">This reduces total capacity for the cluster.</p>
-                    </div>
-                </div>
+                <!-- NOTE: The 'Simulate Failure' input card has been moved/deleted -->
                 
                 <!-- Failure Output Cards (Duplicate of Section 2 with 'Fail' IDs) -->
                 <div class="space-y-4">
@@ -395,19 +384,19 @@
          */
         const INPUT_CONFIG = {
             // --- TOPOLOGY ---
-            RF: { min: 1, max: 5, step: 1, default: 2, suffix: '' },
+            RF: { min: 1, max: 5, step: 1, default: 3, suffix: '' },
             NPC: { min: 1, max: 150, step: 1, default: 12, suffix: '' },
             DPN: { min: 1, max: 32, step: 1, default: 18, suffix: '' },
             DS: { min: 50, max: 1000, step: 5, default: 55, suffix: 'GB' },
             
             // --- FAILURE SCENARIO ---
-            NODES_LOST: { min: 1, max: 50, step: 1, default: 1, suffix: '' },
+            NODES_LOST: { min: 1, max: 150, step: 1, default: 1, suffix: '' }, // Max will be set dynamically based on NPC
 
             // --- WORKLOAD ---
             // MOC is 1 to 1000 Billion (10^9)
             MOC: { min: 1, max: 1000, step: 1, default: 8, suffix: 'B' }, 
-            ARS: { min: 100, max: 4096, step: 10, default: 250, suffix: 'B' },
-            ASEO: { min: 0, max: 50, step: 1, default: 1, suffix: '' },
+            ARS: { min: 100, max: 4096, step: 32, default: 250, suffix: 'B' },
+            ASEO: { min: 0.1, max: 5.0, step: 0.1, default: 1, suffix: '' },
             NSI: { min: 0, max: 32, step: 1, default: 5, suffix: '' },
             TP: { min: 0, max: 100, step: 5, default: 10, suffix: '%' },
             
@@ -423,16 +412,16 @@
          * Safely retrieves input value, defaulting to 0 or config default if element is missing.
          */
         const getInputValue = (id, numeric = true) => {
-    const el = document.getElementById(id);
-    const config = INPUT_CONFIG[id] || {};
-    let value = config.default || 0; // Use config default as base fallback
-    
-    if (el && el.value !== undefined) {
-        value = el.value;
-    }
-    
-    return numeric ? parseFloat(value) : value;
-};
+            const el = document.getElementById(id);
+            const config = INPUT_CONFIG[id] || {};
+            let value = config.default || 0; 
+            
+            if (el && el.value !== undefined) {
+                value = el.value;
+            }
+            
+            return numeric ? parseFloat(value) : value;
+        };
 
         /**
          * Reads input parameters from the DOM and performs all capacity calculations.
@@ -503,7 +492,7 @@
             results.Fail_TSAPC = effectiveNodes * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
             results.Fail_AMC = effectiveNodes * inputs.AMPN;
             
-            // 2. Utilization Recalculation (Handle Division by Zero if all nodes are lost)
+            // 2. Utilization Recalculation (Handle Division by Zero if capacity hits zero)
             results.Fail_ASU = (results.Fail_TSAPC > 0) ? (results.TDS / results.Fail_TSAPC) * 100 : Infinity;
             results.Fail_TMBU = (results.Fail_AMC > 0) ? (results.TMU / results.Fail_AMC) * 100 : Infinity;
             results.Fail_TMUT = (results.Fail_AMC > 0) ? (results.TMT / results.Fail_AMC) * 100 : Infinity;
@@ -630,32 +619,64 @@
          * Initializes all slider properties (min/max/step/value) from INPUT_CONFIG
          * and displays fixed constants.
          */
-   function initializeInputs() {
-    // 1. Initialize sliders from INPUT_CONFIG
-    for (const id in INPUT_CONFIG) {
-        const config = INPUT_CONFIG[id];
-        const inputElement = document.getElementById(id);
-        if (inputElement) {
-            inputElement.min = config.min;
-            inputElement.max = config.max;
-            inputElement.step = config.step;
-            inputElement.value = config.default;
-            
-            // --- FIX APPLIED HERE: Manually update the display span immediately ---
-            updateValue(id, id + 'Value', config.suffix); 
-        }
-    }
+        function initializeInputs() {
+            const npcInput = document.getElementById('NPC');
+            const nodesLostInput = document.getElementById('NODES_LOST');
 
-    // 2. Display fixed constants
-    const csopEl = document.getElementById('CSOPValue');
-    if(csopEl) csopEl.textContent = (FIXED_CONSTANTS.CSOP * 100).toFixed(2) + '%';
-    
-    const ompEl = document.getElementById('OMPValue');
-    if(ompEl) ompEl.textContent = (FIXED_CONSTANTS.OMP * 100).toFixed(2) + '%';
-    
-    // 3. Run initial calculation
-    calculate();
-}
+            // 1. Initialize sliders from INPUT_CONFIG
+            for (const id in INPUT_CONFIG) {
+                const config = INPUT_CONFIG[id];
+                const inputElement = document.getElementById(id);
+                if (inputElement) {
+                    inputElement.min = config.min;
+                    inputElement.max = config.max;
+                    inputElement.step = config.step;
+                    inputElement.value = config.default;
+                    
+                    // Manually update the display span immediately
+                    updateValue(id, id + 'Value', config.suffix); 
+                }
+            }
+
+            // 2. Set dynamic max for NODES_LOST and attach event listener for updates
+            if (npcInput && nodesLostInput) {
+                const initialNPC = parseInt(npcInput.value);
+                
+                // Set initial max based on the default NPC value
+                nodesLostInput.max = initialNPC;
+                
+                // Ensure NODES_LOST default doesn't exceed initial NPC
+                if (parseInt(nodesLostInput.value) > initialNPC) {
+                    nodesLostInput.value = initialNPC;
+                    updateValue('NODES_LOST', 'NODES_LOSTValue', '');
+                }
+
+                // Add event listener to dynamically update NODES_LOST max when NPC changes
+                npcInput.addEventListener('input', () => {
+                    const newNPC = parseInt(npcInput.value);
+                    const currentLost = parseInt(nodesLostInput.value);
+                    
+                    nodesLostInput.max = newNPC;
+                    
+                    // If current lost value exceeds new max, reset it to new max
+                    if (currentLost > newNPC) {
+                        nodesLostInput.value = newNPC;
+                        updateValue('NODES_LOST', 'NODES_LOSTValue', '');
+                    }
+                    calculate();
+                });
+            }
+
+            // 3. Display fixed constants
+            const csopEl = document.getElementById('CSOPValue');
+            if(csopEl) csopEl.textContent = (FIXED_CONSTANTS.CSOP * 100).toFixed(2) + '%';
+            
+            const ompEl = document.getElementById('OMPValue');
+            if(ompEl) ompEl.textContent = (FIXED_CONSTANTS.OMP * 100).toFixed(2) + '%';
+            
+            // 4. Run initial calculation
+            calculate();
+        }
 
         // ===============================================
         // 2.4 INITIALIZATION
