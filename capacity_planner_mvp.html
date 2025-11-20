@@ -104,7 +104,7 @@
                     </h3>
                     <div class="space-y-4">
                         <div class="input-group">
-                            <label class="block text-sm font-medium text-gray-700">Master Object Count (Millions)</label>
+                            <label class="block text-sm font-medium text-gray-700">Master Object Count (GB)</label>
                             <div class="flex items-center space-x-3">
                                 <input type="range" id="MOC" oninput="calculate()">
                                 <span id="MOCValue" class="text-sm font-semibold text-pink-600 w-12 text-right"></span>
@@ -328,7 +328,7 @@
             DS: { min: 50, max: 2000, step: 50, default: 100, suffix: 'GB' },
             
             // --- WORKLOAD ---
-            MOC: { min: 1, max: 1000, step: 1, default: 100, suffix: 'M' },
+            MOC: { min: 1, max: 1000, step: 1, default: 100, suffix: 'B' },
             ARS: { min: 100, max: 4096, step: 64, default: 512, suffix: 'B' },
             ASEO: { min: 0, max: 5, step: 1, default: 1, suffix: '' },
             NSI: { min: 0, max: 32, step: 1, default: 3, suffix: '' },
@@ -354,7 +354,7 @@
                 DPN: parseInt(document.getElementById('DPN').value),
                 DS: parseFloat(document.getElementById('DS').value),
                 // Convert Millions to raw count
-                MOC: parseFloat(document.getElementById('MOC').value) * 1000000, 
+                MOC: parseFloat(document.getElementById('MOC').value) * 1000000000, 
                 ARS: parseFloat(document.getElementById('ARS').value),
                 ASEO: parseFloat(document.getElementById('ASEO').value),
                 NSI: parseInt(document.getElementById('NSI').value),
@@ -442,9 +442,11 @@
             let value = document.getElementById(id).value;
             let display = document.getElementById(displayId);
             
-            if (suffix === 'M') {
-                display.textContent = value + 'M';
-            } else if (suffix === '%') {
+          if (suffix === 'M') {
+    display.textContent = value + 'M';
+} else if (suffix === 'B') {
+    display.textContent = value + 'B';
+} else if (suffix === '%') {
                  display.textContent = value + '%';
             } else {
                 display.textContent = value + suffix;
