@@ -497,105 +497,108 @@
          * Draws the dynamic SVG topology diagram. (Unchanged for clarity)
          */
         function drawTopology(NPC, DPN) {
-            const svg = document.getElementById('topologySvg');
-            svg.innerHTML = ''; // Clear previous content
-            
-            const svgWidth = 500;
-            const svgHeight = 200;
-            const nodeWidth = 80;
-            const nodeHeight = 120;
-            const nodeSpacing = 20;
-            const deviceSize = 10;
-            const maxNodes = 4; // Max nodes to show visually, use '...' for more
+const svg = document.getElementById('topologySvg');
+    svg.innerHTML = ''; // Clear previous content
+    
+    const svgWidth = 500;
+    const svgHeight = 200;
+    const nodeWidth = 80;
+    const nodeHeight = 120;
+    const nodeSpacing = 20;
+    const deviceSize = 10;
+    const maxNodes = 4; // Max nodes to show visually
+    const maxDevicesToShow = 3; // Max devices to show visually
 
-            const nodesToShow = Math.min(NPC, maxNodes);
-            const totalWidth = nodesToShow * nodeWidth + (nodesToShow - 1) * nodeSpacing;
-            let startX = (svgWidth - totalWidth) / 2;
+    const nodesToShow = Math.min(NPC, maxNodes);
+    
+    // --- 1. Calculate Layout Width ---
+    // If we show more than 3 nodes, the 4th spot is reserved for the ellipsis text
+    let displayNodes = nodesToShow;
+    let showEllipsis = NPC > maxNodes;
+    
+    if (showEllipsis) {
+        // Reserve width for the ellipsis text block
+        displayNodes = maxNodes - 1; 
+    }
 
-            // Draw Nodes
-            for (let i = 0; i < nodesToShow; i++) {
-                const x = startX + i * (nodeWidth + nodeSpacing);
-                
-                // Draw Node Container (Server)
-                const nodeRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                nodeRect.setAttribute('x', x);
-                nodeRect.setAttribute('y', 40);
-                nodeRect.setAttribute('width', nodeWidth);
-                nodeRect.setAttribute('height', nodeHeight);
-                nodeRect.setAttribute('rx', 8);
-                nodeRect.setAttribute('fill', '#e0f2f1'); // Light Teal
-                nodeRect.setAttribute('stroke', '#0d9488'); // Dark Teal
-                nodeRect.setAttribute('stroke-width', 2);
-                svg.appendChild(nodeRect);
+    const totalWidth = displayNodes * nodeWidth + (displayNodes - 1) * nodeSpacing;
+    let startX = (svgWidth - totalWidth) / 2;
+    
+    // --- 2. Draw Visible Nodes ---
+    for (let i = 0; i < displayNodes; i++) {
+        const x = startX + i * (nodeWidth + nodeSpacing);
+        
+        // Draw Node Container (Server)
+        const nodeRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        nodeRect.setAttribute('x', x);
+        nodeRect.setAttribute('y', 40);
+        nodeRect.setAttribute('width', nodeWidth);
+        nodeRect.setAttribute('height', nodeHeight);
+        nodeRect.setAttribute('rx', 8);
+        nodeRect.setAttribute('fill', '#e0f2f1'); 
+        nodeRect.setAttribute('stroke', '#0d9488'); 
+        nodeRect.setAttribute('stroke-width', 2);
+        svg.appendChild(nodeRect);
 
-                // Draw Node Label
-                const nodeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                nodeText.setAttribute('x', x + nodeWidth / 2);
-                nodeText.setAttribute('y', 30);
-                nodeText.setAttribute('text-anchor', 'middle');
-                nodeText.setAttribute('font-size', '12');
-                nodeText.setAttribute('fill', '#0f766e');
-                nodeText.textContent = `Node ${i + 1}`;
-                svg.appendChild(nodeText);
+        // Draw Node Label
+        const nodeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        nodeText.setAttribute('x', x + nodeWidth / 2);
+        nodeText.setAttribute('y', 30);
+        nodeText.setAttribute('text-anchor', 'middle');
+        nodeText.setAttribute('font-size', '12');
+        nodeText.setAttribute('fill', '#0f766e');
+        nodeText.textContent = `Node ${i + 1}`;
+        svg.appendChild(nodeText);
 
-                // Draw Devices inside the Node
-                const maxDevicesToShow = 3; // Max devices to show visually
-                const devicesToShow = Math.min(DPN, maxDevicesToShow);
-                const deviceSpacingY = (nodeHeight - 20) / (maxDevicesToShow + 1);
+        // Draw Devices inside the Node
+        const devicesToShow = Math.min(DPN, maxDevicesToShow);
+        const deviceSpacingY = (nodeHeight - 20) / (maxDevicesToShow + 1);
 
-                for (let j = 0; j < devicesToShow; j++) {
-                    const devY = 40 + 15 + (j * deviceSpacingY);
+        for (let j = 0; j < devicesToShow; j++) {
+            const devY = 40 + 15 + (j * deviceSpacingY);
 
-                    // Device Icon (Square)
-                    const devRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                    devRect.setAttribute('x', x + 10);
-                    devRect.setAttribute('y', devY);
-                    devRect.setAttribute('width', nodeWidth - 20);
-                    devRect.setAttribute('height', deviceSize);
-                    devRect.setAttribute('rx', 2);
-                    devRect.setAttribute('fill', '#6b7280'); // Gray
-                    svg.appendChild(devRect);
-
-                    // Device Label (if 1 or 2 devices)
-                    if (DPN <= 2) {
-                        const devText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                        devText.setAttribute('x', x + nodeWidth / 2);
-                        devText.setAttribute('y', devY + deviceSize - 2);
-                        devText.setAttribute('text-anchor', 'middle');
-                        devText.setAttribute('font-size', '8');
-                        devText.setAttribute('fill', '#fff');
-                        devText.textContent = `Device ${j + 1}`;
-                        svg.appendChild(devText);
-                    }
-                }
-                
-                // Draw '...' if DPN > maxDevicesToShow
-                if (DPN > maxDevicesToShow) {
-                    const moreText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                    moreText.setAttribute('x', x + nodeWidth / 2);
-                    moreText.setAttribute('y', 40 + nodeHeight - 10);
-                    moreText.setAttribute('text-anchor', 'middle');
-                    moreText.setAttribute('font-size', '14');
-                    moreText.setAttribute('font-weight', 'bold');
-                    moreText.setAttribute('fill', '#333');
-                    moreText.textContent = `... (${DPN - maxDevicesToShow} more)`;
-                    svg.appendChild(moreText);
-                }
-            }
-
-            // Draw '...' for Nodes if NPC > maxNodes
-            if (NPC > maxNodes) {
-                const x = startX + nodesToShow * (nodeWidth + nodeSpacing) - nodeSpacing / 2;
-                const ellipsisText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                ellipsisText.setAttribute('x', x);
-                ellipsisText.setAttribute('y', 100);
-                ellipsisText.setAttribute('text-anchor', 'middle');
-                ellipsisText.setAttribute('font-size', '30');
-                ellipsisText.setAttribute('fill', '#333');
-                ellipsisText.textContent = `... (${NPC - maxNodes} more nodes)`;
-                svg.appendChild(ellipsisText);
-            }
+            // Device Icon (Square)
+            const devRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            devRect.setAttribute('x', x + 10);
+            devRect.setAttribute('y', devY);
+            devRect.setAttribute('width', nodeWidth - 20);
+            devRect.setAttribute('height', deviceSize);
+            devRect.setAttribute('rx', 2);
+            devRect.setAttribute('fill', '#6b7280');
+            svg.appendChild(devRect);
         }
+        
+        // Draw Device Overflow Text
+        if (DPN > maxDevicesToShow) {
+            const moreText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            moreText.setAttribute('x', x + nodeWidth / 2);
+            moreText.setAttribute('y', 40 + nodeHeight - 10);
+            moreText.setAttribute('text-anchor', 'middle');
+            moreText.setAttribute('font-size', '11');
+            moreText.setAttribute('font-weight', '500');
+            moreText.setAttribute('fill', '#333');
+            moreText.textContent = `+ ${DPN - maxDevicesToShow} Devices`;
+            svg.appendChild(moreText);
+        }
+    }
+
+    // --- 3. Draw Node Overflow Ellipsis ---
+    if (showEllipsis) {
+        // Position the ellipsis block in the last visible node spot
+        const x_ellip = startX + displayNodes * (nodeWidth + nodeSpacing) - nodeSpacing; 
+        
+        // Draw the main ellipsis text
+        const ellipsisText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        ellipsisText.setAttribute('x', x_ellip + nodeWidth / 2 + nodeSpacing);
+        ellipsisText.setAttribute('y', 100);
+        ellipsisText.setAttribute('text-anchor', 'middle');
+        ellipsisText.setAttribute('font-size', '16');
+        ellipsisText.setAttribute('font-weight', 'bold');
+        ellipsisText.setAttribute('fill', '#4f46e5'); // Highlight the overflow number
+        ellipsisText.textContent = `... (+${NPC - displayNodes} NODES)`;
+        svg.appendChild(ellipsisText);
+    }
+}
 
         /**
          * Initializes all slider properties (min/max/step/value) from INPUT_CONFIG
