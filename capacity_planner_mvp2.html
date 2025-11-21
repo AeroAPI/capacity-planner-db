@@ -636,8 +636,10 @@
                 document.getElementById(resultId).textContent = formatPct(value);
                 let width = Math.min(100, value);
                 const bar = document.getElementById(barId);
-                bar.style.width = width + '%';
-                bar.className = `h-2.5 rounded-full ${colorFunc(value)}`;
+                if (bar) {
+                    bar.style.width = width + '%';
+                    bar.className = `h-2.5 rounded-full ${colorFunc(value)}`;
+                }
             };
             
             // Helper function to update Section 6 spans
