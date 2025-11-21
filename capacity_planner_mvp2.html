@@ -176,28 +176,28 @@
             </div>
         </div>
         <hr class="border-teal-100 my-2" />
-        <h4 class="text-xs font-semibold text-gray-600 mb-2">Fixed Overhead Parameters:</h4>
+        <h4 class="text-xs font-semibold text-gray-600 mb-2">Fixed Parameters (for now):</h4>
         <div class="input-group">
-            <label class="block text-sm font-medium text-gray-700">Cluster Storage Overhead Pct (Fixed)</label>
+            <label class="block text-sm font-medium text-gray-700">Cluster Storage Overhead Pct</label>
             <div class="flex items-center space-x-3">
                 <span id="CSOPValue" class="text-sm font-semibold text-teal-600 w-12 text-left"></span>
             </div>
         </div>
         <div class="input-group">
-            <label class="block text-sm font-medium text-gray-700">Overhead Memory Pct (Fixed)</label>
+            <label class="block text-sm font-medium text-gray-700">Overhead Memory Pct</label>
             <div class="flex items-center space-x-3">
                 <span id="OMPValue" class="text-sm font-semibold text-teal-600 w-12 text-left"></span>
             </div>
         </div>
         <!-- NEW PARAMETERS -->
         <div class="input-group">
-            <label class="block text-sm font-medium text-gray-700">Throughput per Disk (MB/s) [Fixed]</label>
+            <label class="block text-sm font-medium text-gray-700">Throughput per Disk (MB/s)</label>
             <div class="flex items-center space-x-3">
                 <span id="TPD_Val" class="text-sm font-semibold text-teal-600 w-16 text-left"></span>
             </div>
         </div>
         <div class="input-group">
-            <label class="block text-sm font-medium text-gray-700">IOPS per Disk (K) [Fixed]</label>
+            <label class="block text-sm font-medium text-gray-700">IOPS per Disk (K)</label>
             <div class="flex items-center space-x-3">
                 <span id="IOPD_Val" class="text-sm font-semibold text-teal-600 w-16 text-left"></span>
             </div>
@@ -320,16 +320,37 @@
         <div class="flex flex-col lg:flex-row gap-8">
             
             <!-- LEFT COLUMN: SECTION 4 (HEALTHY PERFORMANCE) -->
-            <div class="lg:w-1/2 space-y-6">
-                <h2 class="text-xl font-semibold text-orange-700 mb-4">4. Performance Analysis (Healthy Cluster)</h2>
-                <div class="space-y-4">
-                    <!-- Placeholder Content for Section 4 -->
-                    <div class="card bg-white p-6 rounded-xl border border-orange-200 h-48 flex items-center justify-center">
-                        <p class="text-gray-500">Performance metrics placeholder.</p>
-                    </div>
-                </div>
+<div class="lg:w-1/2 space-y-6">
+    <h2 class="text-xl font-semibold text-orange-700 mb-4">4. Performance Analysis (Healthy Cluster)</h2>
+    <div class="space-y-4">
+
+        <!-- Output Card: Total Throughput -->
+        <div class="card bg-white p-6 rounded-xl border border-orange-200">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-lg font-bold text-gray-800">Peak Cluster Throughput (MB/s)</h3>
+                <span id="TPUTResult" class="text-2xl font-extrabold text-orange-600">0 MB/s</span>
             </div>
-            
+            <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
+                <p>Nodes: <span id="TPUT_NPC" class="font-semibold text-gray-800">0</span></p>
+                <p>Throughput per Node: <span id="TPUT_Node" class="font-semibold text-gray-800">0 MB/s</span></p>
+                <p>Devices/Node: <span id="TPUT_DPN" class="font-semibold text-gray-800">0</span></p>
+            </div>
+        </div>
+
+        <!-- Output Card: Total IOPS -->
+        <div class="card bg-white p-6 rounded-xl border border-orange-200">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-lg font-bold text-gray-800">Estimated Cluster IOPS (K)</h3>
+                <span id="IOPSResult" class="text-2xl font-extrabold text-orange-600">0 K</span>
+            </div>
+            <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
+                <p>Nodes: <span id="IOPS_NPC" class="font-semibold text-gray-800">0</span></p>
+                <p>IOPS per Node: <span id="IOPS_Node" class="font-semibold text-gray-800">0 K</span></p>
+                <p>Devices/Node: <span id="IOPS_DPN" class="font-semibold text-gray-800">0</span></p>
+            </div>
+        </div>
+    </div>
+</div>            
             <!-- RIGHT COLUMN: SECTION 5 (FAILURE PERFORMANCE) -->
             <div class="lg:w-1/2 space-y-6">
                 <h2 class="text-xl font-semibold text-red-700 mb-4">5. Performance Analysis (Failure Scenario)</h2>
@@ -441,21 +462,21 @@
          */
         const INPUT_CONFIG = {
             // --- TOPOLOGY ---
-            RF: { min: 1, max: 5, step: 1, default: 3, suffix: '' },
+            RF: { min: 1, max: 5, step: 1, default: 2, suffix: '' },
             NPC: { min: 1, max: 150, step: 1, default: 12, suffix: '' },
             DPN: { min: 1, max: 32, step: 1, default: 18, suffix: '' },
             DS: { min: 50, max: 1000, step: 5, default: 55, suffix: 'GB' },
             
             // --- FAILURE SCENARIO ---
-            NODES_LOST: { min: 1, max: 150, step: 1, default: 1, suffix: '' },
+            NODES_LOST: { min: 1, max: 150, step: 1, default: 4, suffix: '' },
 
             // --- WORKLOAD ---
             // MOC is 1 to 1000 Billion (10^9)
             MOC: { min: 1, max: 1000, step: 1, default: 8, suffix: 'B' }, 
-            ARS: { min: 100, max: 4096, step: 32, default: 250, suffix: 'B' },
-            ASEO: { min: 0.1, max: 5.0, step: 0.1, default: 1, suffix: '' },
-            NSI: { min: 0, max: 32, step: 1, default: 5, suffix: '' },
-            TP: { min: 0, max: 100, step: 5, default: 10, suffix: '%' },
+            ARS: { min: 100, max: 4096, step: 10, default: 260, suffix: 'Bytes' },
+            ASEO: { min: 0.1, max: 5.0, step: 0.1, default: 0.7, suffix: '' },
+            NSI: { min: 0, max: 32, step: 1, default: 1, suffix: '' },
+            TP: { min: 0, max: 100, step: 5, default: 40, suffix: '%' },
             
             // --- SERVER SPECS ---
             AMPN: { min: 16, max: 256, step: 8, default: 64, suffix: 'GB' }
@@ -533,12 +554,20 @@
             const TDS_BYTES = inputs.MOC * inputs.RF * inputs.ARS;
             results.TDS = TDS_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
 
+            // Performance Fundamentals (Node-level)
+results.TPUT_Node = inputs.DPN * FIXED_CONSTANTS.THROUGHPUT_PER_DISK_MBPS;
+results.IOPS_Node = inputs.DPN * FIXED_CONSTANTS.IOPS_PER_DISK_K;
+            
             // --- 2.2.2 HEALTHY CLUSTER UTILIZATION ---
             results.ASU = (results.TDS / results.TSAPC) * 100;
             results.TMBU = (results.TMU / results.AMC) * 100;
             results.TMUT = (results.TMT / results.AMC) * 100;
             results.TMAPC = results.AMC; // Total Available Memory
 
+            // Performance Capacity (Healthy)
+results.Healthy_TPUT = inputs.NPC * results.TPUT_Node;
+results.Healthy_IOPS = inputs.NPC * results.IOPS_Node;
+            
             // --- 2.2.3 FAILURE SCENARIO CALCULATIONS ---
             
             const nodes = inputs.NPC;
