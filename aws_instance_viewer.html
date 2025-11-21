@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Instance Spec Viewer</title>
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fc; }
+        .card { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        h3 { font-weight: 700; }
+        .spec-label { font-weight: 600; color: #4b5563; }
+        .spec-value { color: #1f2937; text-align: right; }
+    </style>
+</head>
+<body class="p-8">
+
+    <div class="max-w-4xl mx-auto space-y-8">
+        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">AWS Instance Specification Lookup</h1>
+        <p class="text-gray-600">Select an AWS instance type to view its core specifications (vCPU, Memory, Storage, and Network).</p>
+
+        <div class="flex flex-col md:flex-row gap-6">
+
+            <!-- Panel 1: Instance Selector -->
+            <div class="md:w-1/3 card bg-white p-6 rounded-xl border border-indigo-200 h-fit">
+                <h3 class="text-lg text-indigo-700 mb-4">1. Select Instance Type</h3>
+                <label for="instance-select" class="block text-sm font-medium text-gray-700 mb-2">AWS Instance Family</label>
+                <select id="instance-select" onchange="updateSpecs(this.value)" 
+                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm">
+                    <!-- Options populated by JS -->
+                </select>
+            </div>
+
+            <!-- Panel 2: Specifications Output (COMPACTED LAYOUT) -->
+            <div class="md:w-2/3">
+                <div id="spec-output-card" class="card bg-white rounded-xl border border-green-200 overflow-hidden">
+                    
+                    <!-- Fixed Header with Title -->
+                    <div class="bg-green-50 p-4 border-b border-green-200">
+                        <h3 class="text-lg text-green-700">2. Instance Specifications</h3>
+                    </div>
+
+                    <!-- Dynamic Content Body -->
+                    <div id="spec-output-body" class="p-6">
+                        <p class="text-center text-gray-500" id="initial-message">Please select an instance type from the left panel.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 2. JAVASCRIPT LOGIC -->
+    <script>
+        // --- Static Data Source: AWS Instance Specs ---
+        const AWS_INSTANCES = {
+            "t3.micro": {
+                vCPU: 2,
+                memory: "1 GiB",
+                storage: "EBS Only",
+                network: "Low to Moderate",
+                dedicated_storage: "No",
+                description: "Burstable performance instance for general-purpose workloads, suitable for microservices and small databases."
+            },
+            "t3.small": {
+                vCPU: 2,
+                memory: "2 GiB",
+                storage: "EBS Only",
+                network: "Low to Moderate",
+                dedicated_storage: "No",
+                description: "Burstable instance with a balance of compute, memory, and networking resources."
+            },
+            "m5.large": {
+                vCPU: 2,
+                memory: "8 GiB",
+                storage: "EBS Only",
+                network: "Up to 10 Gbps",
+                dedicated_storage: "No",
+                description: "General purpose instance offering a balance of compute, memory, and network for most applications."
+            },
+            "m5.xlarge": {
+                vCPU: 4,
+                memory: "16 GiB",
+                storage: "EBS Only",
+                network: "Up to 10 Gbps",
+                dedicated_storage: "No",
+                description: "General purpose instance, good for mid-sized databases, web/app servers, and enterprise applications."
+            },
+            "c6i.xlarge": {
+                vCPU: 4,
+                memory: "8 GiB",
+                storage: "EBS Only",
+                network: "Up to 12.5 Gbps",
+                dedicated_storage: "No",
+                description: "Compute-optimized instance ideal for compute-intensive tasks, batch processing, and high-performance front-ends."
+            },
+            "c6i.4xlarge": {
+                vCPU: 16,
+                memory: "32 GiB",
+                storage: "EBS Only",
+                network: "Up to 50 Gbps",
+                dedicated_storage: "No",
+                description: "High-end compute instance for very demanding scientific modeling and distributed analytics."
+            },
+            "r6g.4xlarge": {
+                vCPU: 16,
+                memory: "128 GiB",
+                storage: "EBS Only",
+                network: "Up to 25 Gbps",
+                dedicated_storage: "No",
+                description: "Memory-optimized instance powered by AWS Graviton2 processors, ideal for in-memory caches and large databases."
+            },
+            "i3en.2xlarge": {
+                vCPU: 8,
+                memory: "64 GiB",
+                storage: "2 x 2.37 TB NVMe SSD",
+                network: "Up to 25 Gbps",
+                dedicated_storage: "Yes (Local NVMe)",
+                description: "Storage-optimized instance designed for high I/O operations, making it suitable for transactional databases and caches."
+            },
+            "i4i.large": {
+                vCPU: 2,
+                memory: "16 GiB",
+                storage: "1 x 475 GB NVme SSD",
+                network: "Up to 12.5 Gbps",
+                dedicated_storage: "Yes (Local NVMe)",
+                description: "Latest generation storage-optimized instance offering faster storage performance and lower latency."
+            }
+        };
+
+        // Function to populate the dropdown menu
+        function populateDropdown() {
+            const select = document.getElementById('instance-select');
+            
+            // Start with a placeholder option
+            const placeholder = document.createElement('option');
+            placeholder.value = "";
+            placeholder.textContent = "--- Select an Instance ---";
+            select.appendChild(placeholder);
+
+            // Populate options from the static data keys
+            const instanceNames = Object.keys(AWS_INSTANCES).sort();
+            instanceNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                select.appendChild(option);
+            });
+        }
+
+// Function to update the specification output panel
+function updateSpecs(instanceName) {
+    // Target the dynamic content body inside the card
+    const outputPanel = document.getElementById('spec-output-body'); 
+    const specs = AWS_INSTANCES[instanceName];
+
+    if (!specs) {
+        outputPanel.innerHTML = '<p class="text-center text-gray-500">Please select an instance type from the left panel.</p>';
+        return;
+    }
+
+    // Helper function to create a compact, single-line spec item
+    const createSpecItem = (label, value) => {
+        // Label is explicitly set to be bold using the spec-label class (font-weight: 600)
+        return `
+            <div class="flex justify-between items-center py-1">
+                <p class="spec-label">${label}</p>
+                <p class="spec-value">${value}</p>
+            </div>
+        `;
+    };
+
+    // Create the HTML content for the selected instance
+    const content = `
+        <h4 class="text-xl font-bold text-indigo-800 mb-4">${instanceName.toUpperCase()}</h4>
+        <p class="text-sm text-gray-600 mb-6">${specs.description}</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+            
+            <!-- LEFT COLUMN (3 Items) -->
+            <div class="space-y-1 md:border-r md:pr-4">
+                
+                ${createSpecItem('vCPUs', specs.vCPU)}
+                ${createSpecItem('Memory (RAM)', specs.memory)}
+                ${createSpecItem('Storage', specs.storage)}
+            </div>
+
+            <!-- RIGHT COLUMN (2 Items) -->
+            <div class="space-y-1 md:pl-4 md:border-l">
+                
+                ${createSpecItem('Network Performance', specs.network)}
+                ${createSpecItem('Local NVMe/Instance Store', specs.dedicated_storage)}
+            </div>
+        </div>
+    `;
+    outputPanel.innerHTML = content;
+}
+        // Initialize the dropdown when the page loads
+        window.onload = populateDropdown;
+    </script>
+</body>
+</html>
