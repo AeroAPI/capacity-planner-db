@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,20 +47,20 @@
             padding-bottom: 0.5rem; /* Adjust padding-bottom */
         }
         .fixed-layout-table {
-    table-layout: fixed;
-    width: 100%;
-}
-.fixed-layout-table td {
-    /* Ensure text in description wraps */
-    word-wrap: break-word; 
-    white-space: normal;
-}
+            table-layout: fixed;
+            width: 100%;
+        }
+        .fixed-layout-table td {
+            /* Ensure text in description wraps */
+            word-wrap: break-word; 
+            white-space: normal;
+        }
     </style>
 </head>
 <body class="p-8">
 
     <div class="max-w-7xl mx-auto space-y-12">
-        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Distributed DB Capacity Planner v113</h1>
+        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Distributed DB Capacity Planner v114</h1>
         
         <!-- ROW 1: SECTION 1 (Inputs - Full Width) -->
         <div class="w-full">
@@ -162,49 +161,49 @@
                     </div>
                 </div>
                 
-<!-- Sub-panel: Server Specs & Overhead -->
-<div class="lg:w-1/3 card bg-white p-6 rounded-xl border border-teal-200">
-    <h3 class="text-lg font-bold text-teal-800 mb-4 flex items-center">
-        <svg class="w-5 h-5 mr-2 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm1 2h10v2H5V6zm0 4h10v2H5v-2zm0 4h10v2H5v-2z"></path></svg>
-        Server Specs & Overhead
-    </h3>
-    <div class="space-y-4">
-        <div class="input-group">
-            <label class="block text-sm font-medium text-gray-700">Available Memory per Node (GB)</label>
-            <div class="flex items-center space-x-3">
-                <input type="range" id="AMPN" oninput="calculate()">
-                <span id="AMPNValue" class="text-sm font-semibold text-teal-600 w-12 text-right"></span>
-            </div>
-        </div>
-        <hr class="border-teal-100 my-2" />
-        <h4 class="text-xs font-semibold text-gray-600 mb-2">Fixed Overhead Parameters:</h4>
-        <div class="input-group">
-            <label class="block text-sm font-medium text-gray-700">Cluster Storage Overhead Pct (Fixed)</label>
-            <div class="flex items-center space-x-3">
-                <span id="CSOPValue" class="text-sm font-semibold text-teal-600 w-12 text-left"></span>
-            </div>
-        </div>
-        <div class="input-group">
-            <label class="block text-sm font-medium text-gray-700">Overhead Memory Pct (Fixed)</label>
-            <div class="flex items-center space-x-3">
-                <span id="OMPValue" class="text-sm font-semibold text-teal-600 w-12 text-left"></span>
-            </div>
-        </div>
-        <!-- NEW PARAMETERS -->
-        <div class="input-group">
-            <label class="block text-sm font-medium text-gray-700">Throughput per Disk (MB/s) [Fixed]</label>
-            <div class="flex items-center space-x-3">
-                <span id="TPD_Val" class="text-sm font-semibold text-teal-600 w-16 text-left"></span>
-            </div>
-        </div>
-        <div class="input-group">
-            <label class="block text-sm font-medium text-gray-700">IOPS per Disk (K) [Fixed]</label>
-            <div class="flex items-center space-x-3">
-                <span id="IOPD_Val" class="text-sm font-semibold text-teal-600 w-16 text-left"></span>
-            </div>
-        </div>
-    </div>
-</div>                
+                <!-- Sub-panel: Server Specs & Overhead -->
+                <div class="lg:w-1/3 card bg-white p-6 rounded-xl border border-teal-200">
+                    <h3 class="text-lg font-bold text-teal-800 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-teal-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm1 2h10v2H5V6zm0 4h10v2H5v-2zm0 4h10v2H5v-2z"></path></svg>
+                        Server Specs & Overhead
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700">Available Memory per Node (GB)</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="range" id="AMPN" oninput="calculate()">
+                                <span id="AMPNValue" class="text-sm font-semibold text-teal-600 w-12 text-right"></span>
+                            </div>
+                        </div>
+                        <hr class="border-teal-100 my-2" />
+                        <h4 class="text-xs font-semibold text-gray-600 mb-2">Fixed Overhead Parameters:</h4>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700">Cluster Storage Overhead Pct (Fixed)</label>
+                            <div class="flex items-center space-x-3">
+                                <span id="CSOPValue" class="text-sm font-semibold text-teal-600 w-12 text-left"></span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700">Overhead Memory Pct (Fixed)</label>
+                            <div class="flex items-center space-x-3">
+                                <span id="OMPValue" class="text-sm font-semibold text-teal-600 w-12 text-left"></span>
+                            </div>
+                        </div>
+                        <!-- NEW PERFORMANCE PARAMETERS -->
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700">Throughput per Disk (MB/s) [Fixed]</label>
+                            <div class="flex items-center space-x-3">
+                                <span id="TPD_Val" class="text-sm font-semibold text-teal-600 w-16 text-left"></span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700">IOPS per Disk (K) [Fixed]</label>
+                            <div class="flex items-center space-x-3">
+                                <span id="IOPD_Val" class="text-sm font-semibold text-teal-600 w-16 text-left"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -306,7 +305,7 @@
                             <span id="TMUT_FailResult" class="text-2xl font-extrabold text-red-600">N/A</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-                            <div id="TMUT_FailBar" class="h-2.5 rounded-full" style="width: 0%"></div>
+                            <div id="TMUTBar" class="h-2.5 rounded-full" style="width: 0%"></div>
                         </div>
                         <div class="text-sm text-gray-600 space-y-1">
                             <p>New Avail Memory (GB): <span id="AMC_FailResult" class="font-semibold text-gray-800">N/A</span></p>
@@ -321,37 +320,15 @@
         <div class="flex flex-col lg:flex-row gap-8">
             
             <!-- LEFT COLUMN: SECTION 4 (HEALTHY PERFORMANCE) -->
-<div class="lg:w-1/2 space-y-6">
-    <h2 class="text-xl font-semibold text-orange-700 mb-4">4. Performance Analysis (Healthy Cluster)</h2>
-    <div class="space-y-4">
-
-        <!-- Output Card: Total Throughput -->
-        <div class="card bg-white p-6 rounded-xl border border-orange-200">
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="text-lg font-bold text-gray-800">Peak Cluster Throughput (MB/s)</h3>
-                <span id="TPUTResult" class="text-2xl font-extrabold text-orange-600">0 MB/s</span>
+            <div class="lg:w-1/2 space-y-6">
+                <h2 class="text-xl font-semibold text-orange-700 mb-4">4. Performance Analysis (Healthy Cluster)</h2>
+                <div class="space-y-4">
+                    <!-- Placeholder Content for Section 4 -->
+                    <div class="card bg-white p-6 rounded-xl border border-orange-200 h-48 flex items-center justify-center">
+                        <p class="text-gray-500">Performance metrics placeholder.</p>
+                    </div>
+                </div>
             </div>
-            <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
-                <p>Nodes: <span id="TPUT_NPC" class="font-semibold text-gray-800">0</span></p>
-                <p>Throughput per Node: <span id="TPUT_Node" class="font-semibold text-gray-800">0 MB/s</span></p>
-                <p>Devices/Node: <span id="TPUT_DPN" class="font-semibold text-gray-800">0</span></p>
-            </div>
-        </div>
-
-        <!-- Output Card: Total IOPS -->
-        <div class="card bg-white p-6 rounded-xl border border-orange-200">
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="text-lg font-bold text-gray-800">Estimated Cluster IOPS (K)</h3>
-                <span id="IOPSResult" class="text-2xl font-extrabold text-orange-600">0 K</span>
-            </div>
-            <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
-                <p>Nodes: <span id="IOPS_NPC" class="font-semibold text-gray-800">0</span></p>
-                <p>IOPS per Node: <span id="IOPS_Node" class="font-semibold text-gray-800">0 K</span></p>
-                <p>Devices/Node: <span id="IOPS_DPN" class="font-semibold text-gray-800">0</span></p>
-            </div>
-        </div>
-    </div>
-</div>
             
             <!-- RIGHT COLUMN: SECTION 5 (FAILURE PERFORMANCE) -->
             <div class="lg:w-1/2 space-y-6">
@@ -455,8 +432,8 @@
             BYTES_TO_GB: 1024 ** 3,
             MIB_TO_GB: 1024,
             // --- NEW FIXED PERFORMANCE CONSTANTS ---
-    THROUGHPUT_PER_DISK_MBPS: 1500, // Throughput per Disk (MB/s)
-    IOPS_PER_DISK_K: 320            // IOPS per Disk (K)
+            THROUGHPUT_PER_DISK_MBPS: 1500, // Throughput per Disk (MB/s)
+            IOPS_PER_DISK_K: 320            // IOPS per Disk (K)
         };
 
         /**
@@ -464,24 +441,24 @@
          */
         const INPUT_CONFIG = {
             // --- TOPOLOGY ---
-            RF: { min: 1, max: 5, step: 1, default: 2, suffix: '' },
+            RF: { min: 1, max: 5, step: 1, default: 3, suffix: '' },
             NPC: { min: 1, max: 150, step: 1, default: 12, suffix: '' },
             DPN: { min: 1, max: 32, step: 1, default: 18, suffix: '' },
             DS: { min: 50, max: 1000, step: 5, default: 55, suffix: 'GB' },
             
             // --- FAILURE SCENARIO ---
-            NODES_LOST: { min: 1, max: 150, step: 1, default: 4, suffix: '' },
+            NODES_LOST: { min: 1, max: 150, step: 1, default: 1, suffix: '' },
 
             // --- WORKLOAD ---
             // MOC is 1 to 1000 Billion (10^9)
             MOC: { min: 1, max: 1000, step: 1, default: 8, suffix: 'B' }, 
-            ARS: { min: 100, max: 4096, step: 10, default: 260, suffix: 'Bytes' },
-            ASEO: { min: 0.1, max: 5.0, step: 0.1, default: 0.7, suffix: '' },
-            NSI: { min: 0, max: 32, step: 1, default: 1, suffix: '' },
-            TP: { min: 0, max: 100, step: 5, default: 40, suffix: '%' },
+            ARS: { min: 100, max: 4096, step: 32, default: 250, suffix: 'B' },
+            ASEO: { min: 0.1, max: 5.0, step: 0.1, default: 1, suffix: '' },
+            NSI: { min: 0, max: 32, step: 1, default: 5, suffix: '' },
+            TP: { min: 0, max: 100, step: 5, default: 10, suffix: '%' },
             
             // --- SERVER SPECS ---
-            AMPN: { min: 16, max: 256, step: 8, default: 256, suffix: 'GB' }
+            AMPN: { min: 16, max: 256, step: 8, default: 64, suffix: 'GB' }
         };
 
         // ===============================================
@@ -507,84 +484,84 @@
          * Reads input parameters from the DOM and performs all capacity calculations.
          * @returns {Object} Dictionary of calculated metrics (Healthy and Failure).
          */
-function calculateCapacity() {
-    // --- Input Parameter Reading ---
-    const inputs = {
-        RF: getInputValue('RF'),
-        NPC: getInputValue('NPC'),
-        DPN: getInputValue('DPN'),
-        DS: getInputValue('DS'),
-        NODES_LOST: getInputValue('NODES_LOST'),
-        // Convert Billions (B) to raw count (10^9)
-        MOC: getInputValue('MOC') * 1000000000, 
-        ARS: getInputValue('ARS'),
-        ASEO: getInputValue('ASEO'),
-        NSI: getInputValue('NSI'),
-        // Convert % to ratio
-        TP: getInputValue('TP') / 100, 
-        AMPN: getInputValue('AMPN'),
-    };
+        function calculateCapacity() {
+            // --- Input Parameter Reading ---
+            const inputs = {
+                RF: getInputValue('RF'),
+                NPC: getInputValue('NPC'),
+                DPN: getInputValue('DPN'),
+                DS: getInputValue('DS'),
+                NODES_LOST: getInputValue('NODES_LOST'),
+                // Convert Billions (B) to raw count (10^9)
+                MOC: getInputValue('MOC') * 1000000000, 
+                ARS: getInputValue('ARS'),
+                ASEO: getInputValue('ASEO'),
+                NSI: getInputValue('NSI'),
+                // Convert % to ratio
+                TP: getInputValue('TP') / 100, 
+                AMPN: getInputValue('AMPN'),
+            };
 
-    const results = {};
-    
-    // --- 2.2.1 COMMON CALCULATIONS (Capacity and Index Sizing) ---
-    
-    // Capacity Fundamentals
-    results.AMC = inputs.NPC * inputs.AMPN;
-    results.OMRC = results.AMC * FIXED_CONSTANTS.OMP;
+            const results = {};
+            
+            // --- 2.2.1 COMMON CALCULATIONS (Capacity and Index Sizing) ---
+            
+            // Capacity Fundamentals
+            results.AMC = inputs.NPC * inputs.AMPN;
+            results.OMRC = results.AMC * FIXED_CONSTANTS.OMP;
 
-    // Index Sizing
-    const PISU_BYTES = inputs.MOC * inputs.RF * FIXED_CONSTANTS.PI_ENTRY_SIZE;
-    results.PISU = PISU_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
-    const SI_PART_1_BYTES = (inputs.MOC * inputs.RF * inputs.ASEO * FIXED_CONSTANTS.SI_ENTRY_SIZE) / FIXED_CONSTANTS.SI_DENSITY_FACTOR;
-    const SI_PART_2_GB = inputs.NSI * FIXED_CONSTANTS.SI_OVERHEAD_MIB / FIXED_CONSTANTS.MIB_TO_GB;
-    results.SISU = (SI_PART_1_BYTES / FIXED_CONSTANTS.BYTES_TO_GB) + SI_PART_2_GB; 
+            // Index Sizing
+            const PISU_BYTES = inputs.MOC * inputs.RF * FIXED_CONSTANTS.PI_ENTRY_SIZE;
+            results.PISU = PISU_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
+            const SI_PART_1_BYTES = (inputs.MOC * inputs.RF * inputs.ASEO * FIXED_CONSTANTS.SI_ENTRY_SIZE) / FIXED_CONSTANTS.SI_DENSITY_FACTOR;
+            const SI_PART_2_GB = inputs.NSI * FIXED_CONSTANTS.SI_OVERHEAD_MIB / FIXED_CONSTANTS.MIB_TO_GB;
+            results.SISU = (SI_PART_1_BYTES / FIXED_CONSTANTS.BYTES_TO_GB) + SI_PART_2_GB; 
 
-    results.TMU = results.OMRC + results.PISU + results.SISU;
-    results.TMT = (results.PISU + results.SISU) * (1 + inputs.TP) + results.OMRC;
-    results.TSAPC = inputs.NPC * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
-    const TDS_BYTES = inputs.MOC * inputs.RF * inputs.ARS;
-    results.TDS = TDS_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
+            results.TMU = results.OMRC + results.PISU + results.SISU;
+            results.TMT = (results.PISU + results.SISU) * (1 + inputs.TP) + results.OMRC;
+            results.TSAPC = inputs.NPC * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
+            const TDS_BYTES = inputs.MOC * inputs.RF * inputs.ARS;
+            results.TDS = TDS_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
 
-    // Performance Fundamentals (Node-level) - NEW LOGIC
-    results.TPUT_Node = inputs.DPN * FIXED_CONSTANTS.THROUGHPUT_PER_DISK_MBPS; // Total Throughput per node
-    results.IOPS_Node = inputs.DPN * FIXED_CONSTANTS.IOPS_PER_DISK_K;         // Total IOPS (K) per node
-
-
-    // --- 2.2.2 HEALTHY CLUSTER UTILIZATION ---
-    
-    // Capacity Utilization
-    results.ASU = (results.TDS / results.TSAPC) * 100;
-    results.TMBU = (results.TMU / results.AMC) * 100;
-    results.TMUT = (results.TMT / results.AMC) * 100;
-    results.TMAPC = results.AMC; // Total Available Memory
-
-    // Performance Capacity (Healthy) - NEW LOGIC
-    results.Healthy_TPUT = inputs.NPC * results.TPUT_Node; // Peak TPUT per cluster
-    results.Healthy_IOPS = inputs.NPC * results.IOPS_Node;   // Estimated IOPS per cluster
+            // Performance Fundamentals (Node-level)
+            results.TPUT_Node = inputs.DPN * FIXED_CONSTANTS.THROUGHPUT_PER_DISK_MBPS; // Total Throughput per node
+            results.IOPS_Node = inputs.DPN * FIXED_CONSTANTS.IOPS_PER_DISK_K;         // Total IOPS (K) per node
 
 
-    // --- 2.2.3 FAILURE SCENARIO CALCULATIONS ---
-    
-    const nodes = inputs.NPC;
-    const lost = inputs.NODES_LOST;
-    const effectiveNodes = Math.max(0, nodes - lost);
-    
-    // Failure Available Capacity
-    results.Fail_TSAPC = effectiveNodes * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
-    results.Fail_AMC = effectiveNodes * inputs.AMPN;
+            // --- 2.2.2 HEALTHY CLUSTER UTILIZATION ---
+            
+            // Capacity Utilization
+            results.ASU = (results.TDS / results.TSAPC) * 100;
+            results.TMBU = (results.TMU / results.AMC) * 100;
+            results.TMUT = (results.TMT / results.AMC) * 100;
+            results.TMAPC = results.AMC; // Total Available Memory
 
-    // Failure Performance
-    results.Fail_TPUT = effectiveNodes * results.TPUT_Node;
-    results.Fail_IOPS = effectiveNodes * results.IOPS_Node;
-    
-    // Utilization Recalculation (Capacity)
-    results.Fail_ASU = (results.Fail_TSAPC > 0) ? (results.TDS / results.Fail_TSAPC) * 100 : Infinity;
-    results.Fail_TMBU = (results.TMU / results.Fail_AMC) * 100 : Infinity;
-    results.Fail_TMUT = (results.TMT / results.Fail_AMC) * 100 : Infinity;
+            // Performance Capacity (Healthy)
+            results.Healthy_TPUT = inputs.NPC * results.TPUT_Node; // Peak TPUT per cluster
+            results.Healthy_IOPS = inputs.NPC * results.IOPS_Node;   // Estimated IOPS per cluster
 
-    return results;
-}
+
+            // --- 2.2.3 FAILURE SCENARIO CALCULATIONS ---
+            
+            const nodes = inputs.NPC;
+            const lost = inputs.NODES_LOST;
+            const effectiveNodes = Math.max(0, nodes - lost);
+            
+            // Failure Available Capacity
+            results.Fail_TSAPC = effectiveNodes * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
+            results.Fail_AMC = effectiveNodes * inputs.AMPN;
+
+            // Failure Performance
+            results.Fail_TPUT = effectiveNodes * results.TPUT_Node;
+            results.Fail_IOPS = effectiveNodes * results.IOPS_Node;
+            
+            // Utilization Recalculation (Capacity)
+            results.Fail_ASU = (results.Fail_TSAPC > 0) ? (results.TDS / results.Fail_TSAPC) * 100 : Infinity;
+            results.Fail_TMBU = (results.TMU / results.Fail_AMC) * 100 : Infinity;
+            results.Fail_TMUT = (results.TMT / results.Fail_AMC) * 100 : Infinity;
+
+            return results;
+        }
 
         // ===============================================
         // 2.3 UI & RENDERING LOGIC
@@ -625,152 +602,154 @@ function calculateCapacity() {
         /**
          * Formats and displays all calculated results in the output cards.
          */
-function displayResults(results) {
-    
-    const formatPct = (value) => {
-        if (!isFinite(value)) return "FATAL";
-        return isNaN(value) ? 'N/A' : (value > 1000 ? '>1000' : value.toFixed(2)) + '%';
-    };
+        function displayResults(results) {
+            
+            const formatPct = (value) => {
+                if (!isFinite(value)) return "FATAL";
+                return isNaN(value) ? 'N/A' : (value > 1000 ? '>1000' : value.toFixed(2)) + '%';
+            };
 
-    const formatGB = (value) => {
-        if (!isFinite(value) || isNaN(value)) return 'N/A';
-        return value.toFixed(2);
-    };
-    
-    const formatGBWithLabel = (value) => {
-        if (!isFinite(value) || isNaN(value)) return 'N/A';
-        if (value > 1024) return (value / 1024).toFixed(2) + ' TB';
-        return value.toFixed(2) + ' GB';
-    }
-
-    // Used for HEALTHY cluster
-    const getBarColorHealthy = (utilization) => {
-        if (utilization > 90) return 'bg-red-600';
-        if (utilization > 75) return 'bg-orange-500';
-        if (utilization > 50) return 'bg-yellow-500';
-        return 'bg-green-600';
-    };
-    
-    // Used for FAILURE cluster (always highlights risk)
-    const getBarColorFail = (utilization) => {
-        if (utilization >= 100) return 'bg-red-700';
-        if (utilization > 90) return 'bg-red-600';
-        if (utilization > 75) return 'bg-orange-500';
-        return 'bg-red-400';
-    };
-
-    // Helper to update the bar and result text
-    const updateMetric = (metric, resultId, barId, colorFunc) => {
-        const value = results[metric];
-        document.getElementById(resultId).textContent = formatPct(value);
-        let width = Math.min(100, value);
-        const bar = document.getElementById(barId);
-        if (bar) {
-            bar.style.width = width + '%';
-            bar.className = `h-2.5 rounded-full ${colorFunc(value)}`;
-        }
-    };
-    
-    // Helper function to update Section 6 spans
-    const updateFormulaValue = (id, value, isPct = false) => {
-        const el = document.getElementById(id);
-        if (el) {
-            if (isPct) {
-                el.textContent = `≈ ${value.toFixed(2)}%`;
-            } else {
-                el.textContent = `≈ ${formatGBWithLabel(value)}`;
+            const formatGB = (value) => {
+                if (!isFinite(value) || isNaN(value)) return 'N/A';
+                return value.toFixed(2);
+            };
+            
+            const formatGBWithLabel = (value) => {
+                if (!isFinite(value) || isNaN(value)) return 'N/A';
+                if (value > 1024) return (value / 1024).toFixed(2) + ' TB';
+                return value.toFixed(2) + ' GB';
             }
+
+            // Used for HEALTHY cluster
+            const getBarColorHealthy = (utilization) => {
+                if (utilization > 90) return 'bg-red-600';
+                if (utilization > 75) return 'bg-orange-500';
+                if (utilization > 50) return 'bg-yellow-500';
+                return 'bg-green-600';
+            };
+            
+            // Used for FAILURE cluster (always highlights risk)
+            const getBarColorFail = (utilization) => {
+                if (utilization >= 100) return 'bg-red-700';
+                if (utilization > 90) return 'bg-red-600';
+                if (utilization > 75) return 'bg-orange-500';
+                return 'bg-red-400';
+            };
+
+            // Helper to update the bar and result text
+            const updateMetric = (metric, resultId, barId, colorFunc) => {
+                const value = results[metric];
+                document.getElementById(resultId).textContent = formatPct(value);
+                let width = Math.min(100, value);
+                const bar = document.getElementById(barId);
+                if (bar) {
+                    bar.style.width = width + '%';
+                    bar.className = `h-2.5 rounded-full ${colorFunc(value)}`;
+                }
+            };
+            
+            // Helper function to update Section 6 spans
+            const updateFormulaValue = (id, value, isPct = false) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (isPct) {
+                        el.textContent = `≈ ${value.toFixed(2)}%`;
+                    } else {
+                        el.textContent = `≈ ${formatGBWithLabel(value)}`;
+                    }
+                }
+            };
+            
+            const formatPerformance = (value, unit) => {
+                if (!isFinite(value) || isNaN(value)) return 'N/A ' + unit;
+                return value.toLocaleString(undefined, { maximumFractionDigits: 0 }) + ' ' + unit;
+            }
+
+            // Re-fetch inputs needed for context display 
+            const inputs = {
+                NPC: getInputValue('NPC'),
+                DPN: getInputValue('DPN'),
+                NODES_LOST: getInputValue('NODES_LOST'),
+            };
+
+            // --- HEALTHY CLUSTER OUTPUT (SECTION 2) ---
+
+            updateMetric('ASU', 'ASUResult', 'ASUBar', getBarColorHealthy);
+            document.getElementById('TDSResult').textContent = formatGB(results.TDS);
+            document.getElementById('TSAPCResult').textContent = formatGB(results.TSAPC);
+
+            updateMetric('TMBU', 'TMBUResult', 'TMBUBar', getBarColorHealthy);
+            document.getElementById('TMUResult').textContent = formatGB(results.TMU);
+            document.getElementById('TMAPCResult').textContent = formatGB(results.TMAPC);
+
+            updateMetric('TMUT', 'TMUTResult', 'TMUTBar', getBarColorHealthy);
+            document.getElementById('TMTResult').textContent = formatGB(results.TMT);
+            document.getElementById('AMCResult').textContent = formatGB(results.AMC);
+            
+            // --- FAILURE CLUSTER OUTPUT (SECTION 3) ---
+
+            updateMetric('Fail_ASU', 'ASU_FailResult', 'ASU_FailBar', getBarColorFail);
+            document.getElementById('TDS_FailResult').textContent = formatGB(results.TDS); 
+            document.getElementById('TSAPC_FailResult').textContent = formatGB(results.Fail_TSAPC);
+
+            updateMetric('Fail_TMBU', 'TMBU_FailResult', 'TMBU_FailBar', getBarColorFail);
+            document.getElementById('TMU_FailResult').textContent = formatGB(results.TMU); 
+            document.getElementById('TMAPC_FailResult').textContent = formatGB(results.Fail_AMC);
+
+            updateMetric('Fail_TMUT', 'TMUT_FailResult', 'TMUT_FailBar', getBarColorFail);
+            document.getElementById('TMT_FailResult').textContent = formatGB(results.TMT); 
+            document.getElementById('AMC_FailResult').textContent = formatGB(results.Fail_AMC); 
+            
+            // --- SECTION 4: HEALTHY PERFORMANCE OUTPUT ---
+            document.getElementById('TPUTResult').textContent = formatPerformance(results.Healthy_TPUT, 'MB/s');
+            document.getElementById('TPUT_Node').textContent = formatPerformance(results.TPUT_Node, 'MB/s');
+            document.getElementById('TPUT_NPC').textContent = inputs.NPC.toLocaleString();
+            document.getElementById('TPUT_DPN').textContent = inputs.DPN.toLocaleString();
+            
+            document.getElementById('IOPSResult').textContent = formatPerformance(results.Healthy_IOPS, 'K');
+            document.getElementById('IOPS_Node').textContent = formatPerformance(results.IOPS_Node, 'K');
+            document.getElementById('IOPS_NPC').textContent = inputs.NPC.toLocaleString();
+            document.getElementById('IOPS_DPN').textContent = inputs.DPN.toLocaleString();
+
+
+            // --- SECTION 5: FAILURE PERFORMANCE OUTPUT ---
+            const lostNodes = inputs.NODES_LOST;
+            const effectiveNodes = Math.max(0, inputs.NPC - lostNodes);
+
+            document.getElementById('TPUT_FailResult').textContent = formatPerformance(results.Fail_TPUT, 'MB/s');
+            document.getElementById('TPUT_Fail_NPC').textContent = effectiveNodes.toLocaleString();
+            document.getElementById('TPUT_Lost').textContent = lostNodes.toLocaleString();
+
+            document.getElementById('IOPS_FailResult').textContent = formatPerformance(results.Fail_IOPS, 'K');
+            document.getElementById('IOPS_Fail_NPC').textContent = effectiveNodes.toLocaleString();
+            document.getElementById('IOPS_Lost').textContent = lostNodes.toLocaleString();
+
+            
+            // --- SECTION 6: CALCULATIONS OUTPUT ---
+            updateFormulaValue('AMC_Val', results.AMC);
+            updateFormulaValue('TSAPC_Val', results.TSAPC);
+            updateFormulaValue('TDS_Val', results.TDS);
+            updateFormulaValue('ASU_Val', results.ASU, true);
+
+            updateFormulaValue('PISU_Val', results.PISU);
+            updateFormulaValue('SISU_Val', results.SISU);
+            updateFormulaValue('OMRC_Val', results.OMRC);
+
+            updateFormulaValue('TMU_Val', results.TMU);
+            updateFormulaValue('TMT_Val', results.TMT);
+            updateMetric('TMUT', 'TMUT_Val', null, () => 'text-gray-700'); // Update TMUT % in table
+
+            
+            // New Performance metrics in Section 6
+            updateFormulaValue('TPUT_Node_Val', results.TPUT_Node);
+            updateFormulaValue('IOPS_Node_Val', results.IOPS_Node, true); 
+            updateFormulaValue('Healthy_TPUT_Val', results.Healthy_TPUT);
+            updateFormulaValue('Healthy_IOPS_Val', results.Healthy_IOPS, true);
+            updateFormulaValue('Fail_TPUT_Val', results.Fail_TPUT);
+            updateFormulaValue('Fail_IOPS_Val', results.Fail_IOPS, true);
         }
-    };
-    
-    const formatPerformance = (value, unit) => {
-        if (!isFinite(value) || isNaN(value)) return 'N/A ' + unit;
-        return value.toLocaleString(undefined, { maximumFractionDigits: 0 }) + ' ' + unit;
-    }
 
-    // Re-fetch inputs needed for context display 
-    const inputs = {
-        NPC: getInputValue('NPC'),
-        DPN: getInputValue('DPN'),
-        NODES_LOST: getInputValue('NODES_LOST'),
-    };
-
-    // --- HEALTHY CLUSTER OUTPUT (SECTION 2) ---
-
-    updateMetric('ASU', 'ASUResult', 'ASUBar', getBarColorHealthy);
-    document.getElementById('TDSResult').textContent = formatGB(results.TDS);
-    document.getElementById('TSAPCResult').textContent = formatGB(results.TSAPC);
-
-    updateMetric('TMBU', 'TMBUResult', 'TMBUBar', getBarColorHealthy);
-    document.getElementById('TMUResult').textContent = formatGB(results.TMU);
-    document.getElementById('TMAPCResult').textContent = formatGB(results.TMAPC);
-
-    updateMetric('TMUT', 'TMUTResult', 'TMUTBar', getBarColorHealthy);
-    document.getElementById('TMTResult').textContent = formatGB(results.TMT);
-    document.getElementById('AMCResult').textContent = formatGB(results.AMC);
-    
-    // --- FAILURE CLUSTER OUTPUT (SECTION 3) ---
-
-    updateMetric('Fail_ASU', 'ASU_FailResult', 'ASU_FailBar', getBarColorFail);
-    document.getElementById('TDS_FailResult').textContent = formatGB(results.TDS); 
-    document.getElementById('TSAPC_FailResult').textContent = formatGB(results.Fail_TSAPC);
-
-    updateMetric('Fail_TMBU', 'TMBU_FailResult', 'TMBU_FailBar', getBarColorFail);
-    document.getElementById('TMU_FailResult').textContent = formatGB(results.TMU); 
-    document.getElementById('TMAPC_FailResult').textContent = formatGB(results.Fail_AMC);
-
-    updateMetric('Fail_TMUT', 'TMUT_FailResult', 'TMUT_FailBar', getBarColorFail);
-    document.getElementById('TMT_FailResult').textContent = formatGB(results.TMT); 
-    document.getElementById('AMC_FailResult').textContent = formatGB(results.Fail_AMC); 
-    
-    // --- SECTION 4: HEALTHY PERFORMANCE OUTPUT (FIXED) ---
-    document.getElementById('TPUTResult').textContent = formatPerformance(results.Healthy_TPUT, 'MB/s');
-    document.getElementById('TPUT_Node').textContent = formatPerformance(results.TPUT_Node, 'MB/s');
-    document.getElementById('TPUT_NPC').textContent = inputs.NPC.toLocaleString();
-    document.getElementById('TPUT_DPN').textContent = inputs.DPN.toLocaleString();
-    
-    document.getElementById('IOPSResult').textContent = formatPerformance(results.Healthy_IOPS, 'K');
-    document.getElementById('IOPS_Node').textContent = formatPerformance(results.IOPS_Node, 'K');
-    document.getElementById('IOPS_NPC').textContent = inputs.NPC.toLocaleString();
-    document.getElementById('IOPS_DPN').textContent = inputs.DPN.toLocaleString();
-
-
-    // --- SECTION 5: FAILURE PERFORMANCE OUTPUT (PLACEHOLDER) ---
-    const lostNodes = inputs.NODES_LOST;
-    const effectiveNodes = Math.max(0, inputs.NPC - lostNodes);
-
-    // NOTE: These are still set to placeholder N/A values and will be finalized later
-    document.getElementById('TPUT_FailResult').textContent = formatPerformance(results.Fail_TPUT, 'MB/s'); // Now shows calculated value
-    document.getElementById('TPUT_Fail_NPC').textContent = effectiveNodes.toLocaleString();
-    document.getElementById('TPUT_Lost').textContent = lostNodes.toLocaleString();
-
-    document.getElementById('IOPS_FailResult').textContent = formatPerformance(results.Fail_IOPS, 'K'); // Now shows calculated value
-    document.getElementById('IOPS_Fail_NPC').textContent = effectiveNodes.toLocaleString();
-    document.getElementById('IOPS_Lost').textContent = lostNodes.toLocaleString();
-
-    
-    // --- SECTION 6: CALCULATIONS OUTPUT ---
-    updateFormulaValue('AMC_Val', results.AMC);
-    updateFormulaValue('TSAPC_Val', results.TSAPC);
-    updateFormulaValue('TDS_Val', results.TDS);
-    updateFormulaValue('ASU_Val', results.ASU, true);
-
-    updateFormulaValue('PISU_Val', results.PISU);
-    updateFormulaValue('SISU_Val', results.SISU);
-    updateFormulaValue('OMRC_Val', results.OMRC);
-
-    updateFormulaValue('TMU_Val', results.TMU);
-    updateFormulaValue('TMT_Val', results.TMT);
-    updateFormulaValue('TMUT_Val', results.TMUT, true);
-    
-    // New Performance metrics in Section 6
-    updateFormulaValue('TPUT_Node_Val', results.TPUT_Node);
-    updateFormulaValue('IOPS_Node_Val', results.IOPS_Node, true); 
-    updateFormulaValue('Healthy_TPUT_Val', results.Healthy_TPUT);
-    updateFormulaValue('Healthy_IOPS_Val', results.Healthy_IOPS, true);
-    updateFormulaValue('Fail_TPUT_Val', results.Fail_TPUT);
-    updateFormulaValue('Fail_IOPS_Val', results.Fail_IOPS, true);
-}       
+        
         /**
          * Initializes all slider properties (min/max/step/value) from INPUT_CONFIG
          * and displays fixed constants.
@@ -787,7 +766,10 @@ function displayResults(results) {
                     inputElement.min = config.min;
                     inputElement.max = config.max;
                     inputElement.step = config.step;
+                    
+                    // Set default value
                     inputElement.value = config.default;
+                    
                     // Manually update the display span immediately
                     updateValue(id, id + 'Value', config.suffix); 
                 }
@@ -830,10 +812,10 @@ function displayResults(results) {
             if(ompEl) ompEl.textContent = (FIXED_CONSTANTS.OMP * 100).toFixed(2) + '%';
 
             const tpdEl = document.getElementById('TPD_Val');
-    if(tpdEl) tpdEl.textContent = FIXED_CONSTANTS.THROUGHPUT_PER_DISK_MBPS.toLocaleString() + ' MB/s';
+            if(tpdEl) tpdEl.textContent = FIXED_CONSTANTS.THROUGHPUT_PER_DISK_MBPS.toLocaleString() + ' MB/s';
 
-    const iopdEl = document.getElementById('IOPD_Val');
-    if(iopdEl) iopdEl.textContent = FIXED_CONSTANTS.IOPS_PER_DISK_K.toLocaleString() + ' K';
+            const iopdEl = document.getElementById('IOPD_Val');
+            if(iopdEl) iopdEl.textContent = FIXED_CONSTANTS.IOPS_PER_DISK_K.toLocaleString() + ' K';
             
             // 4. Run initial calculation
             calculate();
