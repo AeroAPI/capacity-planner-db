@@ -306,55 +306,53 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200 text-sm">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Available Memory per Cluster (AMC)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Available Memory per Node</td>
-                            <td class="px-6 py-4">Total available RAM across all nodes in the cluster.</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Storage available per cluster (TSAPC)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Devices per Node × Device Size × (1 - Cluster Storage Overhead Pct)</td>
-                            <td class="px-6 py-4">The effective total usable storage capacity after system overhead.</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Data Stored (TDS)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Master Object Count × Replication Factor × Average Record Size (B) / 1024^3</td>
-                            <td class="px-6 py-4">Total size of user data across the cluster, including replication.</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Actual Storage Utilization (ASU)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Total Data Stored (TDS) / Total Storage Available (TSAPC)</td>
-                            <td class="px-6 py-4">Ratio of data stored to available capacity. Key for provisioning.</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Primary Index Shmem Used (PISU)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">(Master Object Count × Replication Factor × 64 bytes) / 1024^3</td>
-                            <td class="px-6 py-4">Estimated memory for the Primary Index. (64 bytes per PI entry assumed).</td>
-                        
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Secondary Index Shmem Used (SISU)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">(MOC × RF × Avg SI entries × 21 bytes / 0.75) / 1024^3 + (Number of SI × 16 MiB / 1024)</td>
-                            <td class="px-6 py-4">Estimated memory for Secondary Indexes, including entry overhead and per-index overhead.</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Used (TMU)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Overhead Memory Required (OMRC) + PISU + SISU</td>
-                            <td class="px-6 py-4">Total memory usage without accounting for tombstone overhead.</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory w/ Tombstones (TMT)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">(PISU + SISU) × (1 + Tombstone Pct) + Overhead Memory Required (OMRC)</td>
-                            <td class="px-6 py-4">Worst-case memory usage, including overhead from durable deletes.</td>
-                        </tr>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Utilization w/ Tombstones (TMUT)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Total Memory w/ Tombstones (TMT) / Available Memory per Cluster (AMC)</td>
-                            <td class="px-6 py-4">Key performance indicator for memory pressure.</td>
-                        </tr>
-                    </tbody>
-                </table>
+<tbody class="divide-y divide-gray-200 text-sm">
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Available Memory per Cluster (AMC)</td>
+        <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Available Memory per Node <span id="AMC_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+        <td class="px-6 py-4">Total available RAM across all nodes in the cluster.</td>
+    </tr>
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Storage available per cluster (TSAPC)</td>
+        <td class="px-6 py-4 whitespace-nowrap">Nodes per Cluster × Devices per Node × Device Size × (1 - Cluster Storage Overhead Pct) <span id="TSAPC_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+        <td class="px-6 py-4">The effective total usable storage capacity after system overhead.</td>
+    </tr>
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Data Stored (TDS)</td>
+        <td class="px-6 py-4 whitespace-nowrap">Master Object Count × Replication Factor × Average Record Size (B) / 1024^3 <span id="TDS_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+        <td class="px-6 py-4">Total size of user data across the cluster, including replication.</td>
+    </tr>
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Actual Storage Utilization (ASU)</td>
+        <td class="px-6 py-4 whitespace-nowrap">Total Data Stored (TDS) / Total Storage Available (TSAPC) <span id="ASU_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+        <td class="px-6 py-4">Ratio of data stored to available capacity. Key for provisioning.</td>
+    </tr>
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Primary Index Shmem Used (PISU)</td>
+        <td class="px-6 py-4 whitespace-nowrap">(Master Object Count × Replication Factor × 64 bytes) / 1024^3 <span id="PISU_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+        <td class="px-6 py-4">Estimated memory for the Primary Index. (64 bytes per PI entry assumed).</td>
+    </tr>
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Secondary Index Shmem Used (SISU)</td>
+        <td class="px-6 py-4 whitespace-nowrap">(MOC × RF × Avg SI entries × 21 bytes / 0.75) / 1024^3 + (Number of SI × 16 MiB / 1024) <span id="SISU_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+        <td class="px-6 py-4">Estimated memory for Secondary Indexes, including entry overhead and per-index overhead.</td>
+    </tr>
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Used (TMU)</td>
+        <td class="px-6 py-4 whitespace-nowrap">Overhead Memory Required (OMRC) <span id="OMRC_Val" class="text-xs font-mono p-0.5 bg-gray-100 rounded text-gray-700"></span> + PISU + SISU <span id="TMU_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+        <td class="px-6 py-4">Total memory usage without accounting for tombstone overhead.</td>
+    </tr>
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory w/ Tombstones (TMT)</td>
+        <td class="px-6 py-4 whitespace-nowrap">(PISU + SISU) × (1 + Tombstone Pct) + OMRC <span id="TMT_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+        <td class="px-6 py-4">Worst-case memory usage, including overhead from durable deletes.</td>
+    </tr>
+    <tr>
+        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Memory Utilization w/ Tombstones (TMUT)</td>
+        <td class="px-6 py-4 whitespace-nowrap">Total Memory w/ Tombstones (TMT) / Available Memory per Cluster (AMC) <span id="TMUT_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+        <td class="px-6 py-4">Key performance indicator for memory pressure.</td>
+    </tr>
+</tbody>                </table>
             </div>
         </div>
     </div>
@@ -613,6 +611,32 @@
             updateMetric('Fail_TMUT', 'TMUT_FailResult', 'TMUT_FailBar', getBarColorFail);
             document.getElementById('TMT_FailResult').textContent = formatGB(results.TMT); 
             document.getElementById('AMC_FailResult').textContent = formatGB(results.Fail_AMC); 
+// --- SECTION 4: CALCULATIONS OUTPUT ---
+// Helper function to update Section 4 spans
+const updateFormulaValue = (id, value, isPct = false) => {
+    const el = document.getElementById(id);
+    if (el) {
+        if (isPct) {
+            el.textContent = `≈ ${value.toFixed(2)}%`;
+        } else {
+            el.textContent = `≈ ${value.toFixed(2)} GB`;
+        }
+    }
+};
+
+updateFormulaValue('AMC_Val', results.AMC);
+updateFormulaValue('TSAPC_Val', results.TSAPC);
+updateFormulaValue('TDS_Val', results.TDS);
+updateFormulaValue('ASU_Val', results.ASU, true);
+
+updateFormulaValue('PISU_Val', results.PISU);
+updateFormulaValue('SISU_Val', results.SISU);
+updateFormulaValue('OMRC_Val', results.OMRC);
+
+updateFormulaValue('TMU_Val', results.TMU);
+updateFormulaValue('TMT_Val', results.TMT);
+updateFormulaValue('TMUT_Val', results.TMUT, true);
+        
         }
         
         /**
