@@ -1,5 +1,5 @@
 """
-Main execution script for the interactive Capacity Planner GUI (Colab/Jupyter).
+Main execution script for the interactive Capacity Planner GUI (Colab/Jupyter). v2
 
 Sets up UI widgets and links them to the calculator logic.
 """
@@ -22,6 +22,7 @@ CARD_STYLE_WKL = "border: 1px solid #fbcfe8; border-radius: 0.5rem; padding: 1.5
 CARD_STYLE_SERVER = "border: 1px solid #99f6e4; border-radius: 0.5rem; padding: 1.5rem; background-color: white;"
 CARD_STYLE_CAPACITY = "border: 1px solid #bbf7d0; border-radius: 0.5rem; padding: 1.5rem; background-color: white;"
 MAIN_HEADER_STYLE = "font-weight: 600; font-size: 1.25rem; color: #4338ca; margin-bottom: 1rem;"
+DIVIDER_STYLE = "border-top: 1px solid #E5E7EB; margin-top: 10px; padding-top: 10px;"
 
 def get_bar_color_class(utilization, fail_scenario=False):
     """Maps utilization percentage to an appropriate color."""
@@ -83,6 +84,52 @@ def render_html_metric(title: str, results: Dict[str, float], metric_key: str, u
     </div>
     """
 
+def render_html_performance(title: str, results: Dict[str, float], tput_key: str, iops_key: str, node_tput_key: str, node_iops_key: str, is_failure: bool = False, inputs: Dict[str, Any] = None):
+    """Generates HTML for performance cards (Sections 4 & 5)."""
+    
+    tput_val = results.get(tput_key, 0)
+    iops_val = results.get(iops_key, 0)
+    node_tput_val = results.get(node_tput_key, 0)
+    node_iops_val = results.get(node_iops_key, 0)
+    
+    
+    def format_performance(value, unit):
+        if not math.isfinite(value) or value == 0: return 'N/A ' + unit
+        return f"{value:,.0f} {unit}"
+
+    color_class = "#f97316" if is_failure else "#10b981"
+    border_class = "#fecaca" if is_failure else "#bbf7d0"
+    
+    npc = inputs.get('NPC', 0)
+    dpn = inputs.get('DPN', 0)
+    lost = inputs.get('NODES_LOST', 0)
+    effective_nodes = max(0, npc - lost)
+
+    return f"""
+    <div style="{CARD_STYLE_CAPACITY.replace('border-indigo-200', 'border-gray-200').replace('bbf7d0', border_class)}">
+        <h4 style="font-weight: bold; color: {color_class}; margin-bottom: 10px;">{title}</h4>
+        
+        <div style="{DIVIDER_STYLE.replace('10px', '5px')}" >
+            <p style="font-weight: 700; color: #374151;">Throughput</p>
+            <span style="font-size: 1.5em; font-weight: bold; color: {color_class};">{format_performance(tput_val, 'MB/s')}</span>
+        </div>
+
+        <div style="font-size: 0.85em; color: #6B7280; margin-top: 5px;">
+            <p>{'Nodes Available' if is_failure else 'Total Nodes'}: <span style="font-weight: 600; color: #1f2937;">{effective_nodes if is_failure else npc}</span></p>
+            <p>Throughput per Node: <span style="font-weight: 600; color: #1f2937;">{format_performance(node_tput_val, 'MB/s')}</span></p>
+        </div>
+        
+        <div style="{DIVIDER_STYLE.replace('10px', '5px')}">
+            <p style="font-weight: 700; color: #374151;">IOPS</p>
+            <span style="font-size: 1.5em; font-weight: bold; color: {color_class};">{format_performance(iops_val, 'K')}</span>
+        </div>
+         <div style="font-size: 0.85em; color: #6B7280; margin-top: 5px;">
+            <p>IOPS per Node: <span style="font-weight: 600; color: #1f2937;">{format_performance(node_iops_val, 'K')}</span></p>
+            <p>Devices per Node: <span style="font-weight: 600; color: #1f2937;">{dpn}</span></p>
+        </div>
+    </div>
+    """
+
 def create_slider(id: str) -> IntSlider | FloatSlider:
     """Helper to create a slider widget based on the INPUT_CONFIG."""
     config_item = config.INPUT_CONFIG[id]
@@ -92,14 +139,14 @@ def create_slider(id: str) -> IntSlider | FloatSlider:
     # Use DISPLAY_NAMES for the slider label
     full_label = config.DISPLAY_NAMES.get(id, id)
     
-    description_text = f"{full_label}{f' ({config_item.get('suffix').strip()})' if config_item.get('suffix') else ''}"
+    description_text = full_label
 
     return SliderClass(
         min=config_item['min'],
         max=config_item['max'],
         step=config_item['step'],
         value=config_item['default'],
-        description=full_label,
+        description=description_text,
         style=STYLE,
         layout=Layout(width='auto')
     )
@@ -112,13 +159,21 @@ def calculate_and_display(**kwargs):
     """The function executed by ipywidgets on input change."""
     
     # 1. Calculate Results using the external calculator
-    results = calculator.calculate_capacity(kwargs)
+    # The MOC value must be converted from 'Billion' back to raw scale before passing to calculator.
+    
+    # Create clean input dictionary for the calculator (scaling MOC correctly)
+    calculator_inputs = kwargs.copy()
+    # MOC is input value * 10^9
+    calculator_inputs['MOC'] = kwargs['MOC'] * 1000000000 
+    # TP is input value (0-100) / 100
+    calculator_inputs['TP'] = kwargs['TP'] / 100 
+    
+    results = calculator.calculate_capacity(calculator_inputs)
     
     # 2. Dynamic Constraint Logic (ensures Nodes Lost <= NPC)
     npc_value = kwargs.get('NPC', config.INPUT_CONFIG['NPC']['default'])
     nodes_lost_value = kwargs.get('NODES_LOST', config.INPUT_CONFIG['NODES_LOST']['default'])
     
-    # Update max value of NODES_LOST widget (must be done outside the calculation output function)
     if 'NODES_LOST' in widget_map:
         nodes_lost_widget = widget_map['NODES_LOST']
         nodes_lost_widget.max = npc_value
@@ -126,7 +181,13 @@ def calculate_and_display(**kwargs):
             nodes_lost_widget.value = npc_value
             nodes_lost_value = npc_value
             
-    # 3. Render Output
+    # 3. Get raw inputs for display context
+    display_inputs = {
+        'NPC': kwargs.get('NPC', 0),
+        'DPN': kwargs.get('DPN', 0),
+        'NODES_LOST': kwargs.get('NODES_LOST', 0),
+    }
+
     
     # --- SECTION 2: HEALTHY CAPACITY ---
     section_2_html = render_html_metric(
@@ -150,30 +211,49 @@ def calculate_and_display(**kwargs):
     section_3_html += render_html_metric(
         "Failure Memory w/ Tombstones (%)", results, 'Fail_TMUT', 'TMT', 'Fail_AMC', is_failure=True
     )
+    
+    # --- SECTION 4: HEALTHY PERFORMANCE ---
+    section_4_html = render_html_performance(
+        "Healthy Cluster Peak Performance", results, 'Healthy_TPUT', 'Healthy_IOPS', 'TPUT_Node', 'IOPS_Node', is_failure=False, inputs=display_inputs
+    )
+    
+    # --- SECTION 5: FAILURE PERFORMANCE ---
+    section_5_html = render_html_performance(
+        "Failure Remaining Performance", results, 'Fail_TPUT', 'Fail_IOPS', 'TPUT_Node', 'IOPS_Node', is_failure=True, inputs=display_inputs
+    )
 
 
     # --- ASSEMBLE FINAL OUTPUT ---
     
-    # Create the two columns for capacity output
+    # ROW 2 (Capacity)
     capacity_col_1 = VBox([
         HTML(f'<h3 style="{MAIN_HEADER_STYLE.replace("1.25rem", "1.0rem").replace("color: #4338ca", "color: #10b981")}">2. Capacity Analysis (Healthy Cluster)</h3>'),
         HTML(value=section_2_html)
     ])
-    
     capacity_col_2 = VBox([
         HTML(f'<h3 style="{MAIN_HEADER_STYLE.replace("1.25rem", "1.0rem").replace("color: #4338ca", "color: #8b5cf6")}">3. Capacity Analysis (Failure Scenario)</h3>'),
         HTML(value=section_3_html)
     ])
-    
-    
-    # Combine the two columns into a horizontal output
-    combined_output = HBox([capacity_col_1, capacity_col_2], 
+    combined_capacity_output = HBox([capacity_col_1, capacity_col_2], 
                            layout=Layout(justify_content='space-between', width='100%'))
 
-    # Placeholder for future performance section
-    placeholder = HTML(f'<p style="padding: 10px; color:#6b7280;">Future Performance Analysis sections (4 & 5) will be added here.</p>')
+    # ROW 3 (Performance)
+    performance_col_1 = VBox([
+        HTML(f'<h3 style="{MAIN_HEADER_STYLE.replace("1.25rem", "1.0rem").replace("color: #4338ca", "color: #f97316")}">4. Performance Analysis (Healthy Cluster)</h3>'),
+        HTML(value=section_4_html)
+    ])
+    performance_col_2 = VBox([
+        HTML(f'<h3 style="{MAIN_HEADER_STYLE.replace("1.25rem", "1.0rem").replace("color: #4338ca", "color: #ef4444")}">5. Performance Analysis (Failure Scenario)</h3>'),
+        HTML(value=section_5_html)
+    ])
+    combined_performance_output = HBox([performance_col_1, performance_col_2], 
+                           layout=Layout(justify_content='space-between', width='100%'))
 
-    final_output = VBox([combined_output, placeholder])
+    # ROW 4 (Calculations) - Placeholder text added for completeness
+    calculations_html = HTML(f'<p style="padding: 10px; color:#6b7280;">6. Calculations and Definitions Table would display here.</p>')
+
+    
+    final_output = VBox([combined_capacity_output, combined_performance_output, calculations_html])
     
     return final_output
 
@@ -209,8 +289,10 @@ if __name__ == '__main__':
         HTML(f'<div style="{TITLE_STYLE}; color: #14b8a6;">Server Specs & Overhead</div>'), 
         widget_map['AMPN'],
         HTML('<hr style="margin: 10px 0; border-color: #99f6e4;">'),
-        HTML(f'<p style="font-size: 0.9em; color: #6b7280;">{config.DISPLAY_NAMES["CSOP"]}: {config.FIXED_CONSTANTS["CSOP"]*100:.2f}%</p>'),
-        HTML(f'<p style="font-size: 0.9em; color: #6b7280;">{config.DISPLAY_NAMES["OMP"]}: {config.FIXED_CONSTANTS["OMP"]*100:.2f}%</p>'),
+        HTML(f'<p style="font-size: 0.9em; color: #6b7280;">{config.DISPLAY_NAMES["CSOP"]}: {config.CLUSTER_STORAGE_OVERHEAD_PCT*100:.2f}%</p>'),
+        HTML(f'<p style="font-size: 0.9em; color: #6b7280;">{config.DISPLAY_NAMES["OMP"]}: {config.OVERHEAD_MEMORY_PCT*100:.2f}%</p>'),
+        HTML(f'<p style="font-size: 0.9em; color: #6b7280;">Throughput per Disk: {config.THROUGHPUT_PER_DISK_MBPS:,.0f} MB/s</p>'),
+        HTML(f'<p style="font-size: 0.9em; color: #6b7280;">IOPS per Disk: {config.IOPS_PER_DISK_K:,.0f} K</p>'),
     ], layout=Layout(width=LAYOUT_WIDTH, border=CARD_STYLE_SERVER))
 
     # 2. Interactive Output Area 
