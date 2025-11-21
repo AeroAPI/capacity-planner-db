@@ -46,6 +46,16 @@
             padding-top: 0.5rem; /* Adjust padding-top */
             padding-bottom: 0.5rem; /* Adjust padding-bottom */
         }
+/* Enforce fixed proportional column widths */
+        .fixed-layout-table {
+    table-layout: fixed;
+    width: 100%;
+}
+.fixed-layout-table td {
+    /* Ensure text in description wraps, overriding nowrap tendency */
+    word-wrap: break-word; 
+    white-space: normal;
+}
     </style>
 </head>
 <body class="p-8">
@@ -298,8 +308,13 @@
         <div class="w-full space-y-6">
             <h2 class="text-xl font-semibold text-gray-700 mt-12 mb-4 border-t pt-4">4. Calculations and Definitions</h2>
             <div class="bg-white p-6 rounded-xl card overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 tight-table">
-                    <thead class="bg-gray-50">
+<table class="min-w-full divide-y divide-gray-200 tight-table fixed-layout-table">
+    <colgroup>
+        <!-- Define column widths: Metric (25%), Formula (45%), Description (30%) -->
+        <col style="width: 25%;">
+        <col style="width: 45%;">
+        <col style="width: 30%;">
+    </colgroup>                    <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metric</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Formula Used</th>
@@ -395,11 +410,11 @@
             MOC: { min: 1, max: 1000, step: 1, default: 8, suffix: 'B' }, 
             ARS: { min: 100, max: 4096, step: 32, default: 250, suffix: 'B' },
             ASEO: { min: 0.1, max: 5.0, step: 0.1, default: 1, suffix: '' },
-            NSI: { min: 0, max: 32, step: 1, default: 5, suffix: '' },
-            TP: { min: 0, max: 100, step: 5, default: 10, suffix: '%' },
+            NSI: { min: 0, max: 32, step: 1, default: 1, suffix: '' },
+            TP: { min: 0, max: 100, step: 5, default: 40, suffix: '%' },
             
             // --- SERVER SPECS ---
-            AMPN: { min: 16, max: 256, step: 8, default: 64, suffix: 'GB' }
+            AMPN: { min: 16, max: 512, step: 8, default: 256, suffix: 'GB' }
         };
 
         // ===============================================
