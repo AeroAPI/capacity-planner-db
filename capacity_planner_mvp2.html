@@ -60,7 +60,7 @@
 <body class="p-8">
 
     <div class="max-w-7xl mx-auto space-y-12">
-        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Distributed DB Capacity Planner v101</h1>
+        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Distributed DB Capacity Planner</h1>
         
         <!-- ROW 1: SECTION 1 (Inputs - Full Width) -->
         <div class="w-full">
@@ -447,6 +447,37 @@
                             <td class="px-6 py-4 whitespace-nowrap">Total Memory w/ Tombstones (TMT) / Available Memory per Cluster (AMC) <span id="TMUT_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
                             <td class="px-6 py-4">Key performance indicator for memory pressure.</td>
                         </tr>
+                        <!-- New Performance Metrics in Calculations Table -->
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Throughput per Node</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Throughput per Disk (MB/s) × Devices per node <span id="TPUT_Node_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Calculated capacity of a single cluster node (Healthy/Failure).</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Estimated IOPS per Node</td>
+                            <td class="px-6 py-4 whitespace-nowrap">IOPS per Disk (K) × Devices per node <span id="IOPS_Node_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Calculated IOPS capacity of a single cluster node (Healthy/Failure).</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Peak Cluster Throughput (Healthy)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total Throughput per Node × Total Nodes <span id="Healthy_TPUT_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Total maximum throughput capacity of the entire cluster.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Estimated Cluster IOPS (Healthy)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total IOPS per Node × Total Nodes <span id="Healthy_IOPS_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Total maximum IOPS capacity of the entire cluster.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Failure Cluster Throughput</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total Throughput per Node × Effective Nodes <span id="Fail_TPUT_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Remaining throughput capacity after nodes are lost.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Failure Cluster IOPS</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total IOPS per Node × Effective Nodes <span id="Fail_IOPS_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Remaining IOPS capacity after nodes are lost.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -679,12 +710,15 @@
             // Helper to update the bar and result text
             const updateMetric = (metric, resultId, barId, colorFunc) => {
                 const value = results[metric];
-                document.getElementById(resultId).textContent = formatPct(value);
-                let width = Math.min(100, value);
-                const bar = document.getElementById(barId);
-                if (bar) {
-                    bar.style.width = width + '%';
-                    bar.className = `h-2.5 rounded-full ${colorFunc(value)}`;
+                const resultEl = document.getElementById(resultId);
+                const barEl = document.getElementById(barId);
+                
+                if (resultEl) resultEl.textContent = formatPct(value);
+                
+                if (barEl) {
+                    let width = Math.min(100, value);
+                    barEl.style.width = width + '%';
+                    barEl.className = `h-2.5 rounded-full ${colorFunc(value)}`;
                 }
             };
             
