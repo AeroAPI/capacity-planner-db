@@ -60,7 +60,7 @@
 <body class="p-8">
 
     <div class="max-w-7xl mx-auto space-y-12">
-        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Distributed DB Capacity Planner v107</h1>
+        <h1 class="text-3xl font-bold text-gray-800 border-b pb-2">Distributed DB Capacity Planner v108</h1>
         
         <!-- ROW 1: SECTION 1 (Inputs - Full Width) -->
         <div class="w-full">
@@ -316,53 +316,70 @@
             </div>
         </div>
         
-        <!-- ROW 3: SECTIONS 4 & 5 (NEW Performance Outputs - Side by Side) -->
-        <div class="flex flex-col lg:flex-row gap-8">
+<!-- ROW 3: SECTIONS 4 & 5 (NEW Performance Outputs - Side by Side) -->
+<div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- LEFT COLUMN: SECTION 4 (HEALTHY PERFORMANCE) -->
-<div class="lg:w-1/2 space-y-6">
-    <h2 class="text-xl font-semibold text-orange-700 mb-4">4. Performance Analysis (Healthy Cluster)</h2>
-    <div class="space-y-4">
+    <!-- LEFT COLUMN: SECTION 4 (HEALTHY PERFORMANCE) -->
+    <div class="lg:w-1/2 space-y-6">
+        <h2 class="text-xl font-semibold text-orange-700 mb-4">4. Performance Analysis (Healthy Cluster)</h2>
+        <div class="space-y-4">
 
-        <!-- Output Card: Total Throughput -->
-        <div class="card bg-white p-6 rounded-xl border border-orange-200">
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="text-lg font-bold text-gray-800">Peak Cluster Throughput (MB/s)</h3>
-                <span id="TPUTResult" class="text-2xl font-extrabold text-orange-600">0 MB/s</span>
+            <!-- Output Card: Total Throughput -->
+            <div class="card bg-white p-6 rounded-xl border border-orange-200">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-lg font-bold text-gray-800">Peak Cluster Throughput (MB/s)</h3>
+                    <span id="TPUTResult" class="text-2xl font-extrabold text-orange-600">0 MB/s</span>
+                </div>
+                <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
+                    <p>Nodes: <span id="TPUT_NPC" class="font-semibold text-gray-800">0</span></p>
+                    <p>Throughput per Node: <span id="TPUT_Node" class="font-semibold text-gray-800">0 MB/s</span></p>
+                    <p>Devices/Node: <span id="TPUT_DPN" class="font-semibold text-gray-800">0</span></p>
+                </div>
             </div>
-            <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
-                <p>Nodes: <span id="TPUT_NPC" class="font-semibold text-gray-800">0</span></p>
-                <p>Throughput per Node: <span id="TPUT_Node" class="font-semibold text-gray-800">0 MB/s</span></p>
-                <p>Devices/Node: <span id="TPUT_DPN" class="font-semibold text-gray-800">0</span></p>
-            </div>
-        </div>
 
-        <!-- Output Card: Total IOPS -->
-        <div class="card bg-white p-6 rounded-xl border border-orange-200">
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="text-lg font-bold text-gray-800">Estimated Cluster IOPS (K)</h3>
-                <span id="IOPSResult" class="text-2xl font-extrabold text-orange-600">0 K</span>
-            </div>
-            <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
-                <p>Nodes: <span id="IOPS_NPC" class="font-semibold text-gray-800">0</span></p>
-                <p>IOPS per Node: <span id="IOPS_Node" class="font-semibold text-gray-800">0 K</span></p>
-                <p>Devices/Node: <span id="IOPS_DPN" class="font-semibold text-gray-800">0</span></p>
-            </div>
-        </div>
-    </div>
-</div>            
-            <!-- RIGHT COLUMN: SECTION 5 (FAILURE PERFORMANCE) -->
-            <div class="lg:w-1/2 space-y-6">
-                <h2 class="text-xl font-semibold text-red-700 mb-4">5. Performance Analysis (Failure Scenario)</h2>
-                <div class="space-y-4">
-                    <!-- Placeholder Content for Section 5 -->
-                    <div class="card bg-white p-6 rounded-xl border border-red-200 h-48 flex items-center justify-center">
-                        <p class="text-gray-500">Failure performance metrics placeholder.</p>
-                    </div>
+            <!-- Output Card: Total IOPS -->
+            <div class="card bg-white p-6 rounded-xl border border-orange-200">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-lg font-bold text-gray-800">Estimated Cluster IOPS (K)</h3>
+                    <span id="IOPSResult" class="text-2xl font-extrabold text-orange-600">0 K</span>
+                </div>
+                <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
+                    <p>Nodes: <span id="IOPS_NPC" class="font-semibold text-gray-800">0</span></p>
+                    <p>IOPS per Node: <span id="IOPS_Node" class="font-semibold text-gray-800">0 K</span></p>
+                    <p>Devices/Node: <span id="IOPS_DPN" class="font-semibold text-gray-800">0</span></p>
                 </div>
             </div>
         </div>
         
+        <!-- RIGHT COLUMN: SECTION 5 (FAILURE PERFORMANCE) -->
+        <div class="lg:w-1/2 space-y-6">
+            <h2 class="text-xl font-semibold text-red-700 mb-4">5. Performance Analysis (Failure Scenario)</h2>
+            
+            <!-- Output Card: Failure Throughput -->
+            <div class="card bg-white p-6 rounded-xl border border-red-200">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-lg font-bold text-gray-800">Remaining Throughput (MB/s)</h3>
+                    <span id="TPUT_FailResult" class="text-2xl font-extrabold text-red-600">0 MB/s</span>
+                </div>
+                <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
+                    <p>Effective Nodes: <span id="TPUT_Fail_NPC" class="font-semibold text-gray-800">0</span></p>
+                    <p>Nodes Lost: <span id="TPUT_Lost" class="font-semibold text-gray-800">0</span></p>
+                </div>
+            </div>
+
+            <!-- Output Card: Failure IOPS -->
+            <div class="card bg-white p-6 rounded-xl border border-red-200">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-lg font-bold text-gray-800">Remaining IOPS (Thousands)</h3>
+                    <span id="IOPS_FailResult" class="text-2xl font-extrabold text-red-600">0 K</span>
+                </div>
+                <div class="text-sm text-gray-600 space-y-1 pt-1 border-t border-gray-100">
+                    <p>Effective Nodes: <span id="IOPS_Fail_NPC" class="font-semibold text-gray-800">0</span></p>
+                    <p>Nodes Lost: <span id="IOPS_Lost" class="font-semibold text-gray-800">0</span></p>
+                </div>
+            </div>
+        </div>
+    </div>        
         <!-- ROW 4: SECTION 6 (Calculations - Full Width) -->
         <div class="w-full space-y-6">
             <h2 class="text-xl font-semibold text-gray-700 mt-12 mb-4 border-t pt-4">6. Calculations and Definitions</h2>
@@ -428,6 +445,37 @@
                             <td class="px-6 py-4 whitespace-nowrap">Total Memory w/ Tombstones (TMT) / Available Memory per Cluster (AMC) <span id="TMUT_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
                             <td class="px-6 py-4">Key performance indicator for memory pressure.</td>
                         </tr>
+                        <!-- New Performance Metrics in Calculations Table -->
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Total Throughput per Node</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Throughput per Disk (MB/s) × Devices per node <span id="TPUT_Node_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Calculated capacity of a single cluster node.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Estimated IOPS per Node</td>
+                            <td class="px-6 py-4 whitespace-nowrap">IOPS per Disk (K) × Devices per node <span id="IOPS_Node_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Calculated IOPS capacity of a single cluster node.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Peak Cluster Throughput (Healthy)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total Throughput per Node × Total Nodes <span id="Healthy_TPUT_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Total maximum throughput capacity of the entire cluster.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Estimated Cluster IOPS (Healthy)</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total IOPS per Node × Total Nodes <span id="Healthy_IOPS_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Total maximum IOPS capacity of the entire cluster.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Failure Cluster Throughput</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total Throughput per Node × Effective Nodes <span id="Fail_TPUT_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Remaining throughput capacity after nodes are lost.</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Failure Cluster IOPS</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Total IOPS per Node × Effective Nodes <span id="Fail_IOPS_Val" class="text-xs font-mono ml-2 p-0.5 bg-gray-100 rounded text-gray-700"></span></td>
+                            <td class="px-6 py-4">Remaining IOPS capacity after nodes are lost.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -479,7 +527,7 @@
             TP: { min: 0, max: 100, step: 5, default: 40, suffix: '%' },
             
             // --- SERVER SPECS ---
-            AMPN: { min: 16, max: 256, step: 8, default: 64, suffix: 'GB' }
+            AMPN: { min: 16, max: 256, step: 8, default: 256, suffix: 'GB' }
         };
 
         // ===============================================
@@ -505,87 +553,85 @@
          * Reads input parameters from the DOM and performs all capacity calculations.
          * @returns {Object} Dictionary of calculated metrics (Healthy and Failure).
          */
-        function calculateCapacity() {
-            // --- Input Parameter Reading ---
-            const inputs = {
-                RF: getInputValue('RF'),
-                NPC: getInputValue('NPC'),
-                DPN: getInputValue('DPN'),
-                DS: getInputValue('DS'),
-                NODES_LOST: getInputValue('NODES_LOST'),
-                // Convert Billions (B) to raw count (10^9)
-                MOC: getInputValue('MOC') * 1000000000, 
-                ARS: getInputValue('ARS'),
-                ASEO: getInputValue('ASEO'),
-                NSI: getInputValue('NSI'),
-                // Convert % to ratio
-                TP: getInputValue('TP') / 100, 
-                AMPN: getInputValue('AMPN'),
-            };
 
-            const results = {};
-            
-            // --- 2.2.1 COMMON CALCULATIONS ---
-            
-            // Total Available Memory per Cluster (Healthy)
-            results.AMC = inputs.NPC * inputs.AMPN;
+function calculateCapacity() {
+    // --- Input Parameter Reading ---
+    const inputs = {
+        RF: getInputValue('RF'),
+        NPC: getInputValue('NPC'),
+        DPN: getInputValue('DPN'),
+        DS: getInputValue('DS'),
+        NODES_LOST: getInputValue('NODES_LOST'),
+        // Convert Billions (B) to raw count (10^9)
+        MOC: getInputValue('MOC') * 1000000000, 
+        ARS: getInputValue('ARS'),
+        ASEO: getInputValue('ASEO'),
+        NSI: getInputValue('NSI'),
+        // Convert % to ratio
+        TP: getInputValue('TP') / 100, 
+        AMPN: getInputValue('AMPN'),
+    };
 
-            // Overhead memory required per cluster (OMRC)
-            results.OMRC = results.AMC * FIXED_CONSTANTS.OMP;
+    const results = {};
+    
+    // --- 2.2.1 COMMON CALCULATIONS (Capacity and Index Sizing) ---
+    
+    // Capacity Fundamentals
+    results.AMC = inputs.NPC * inputs.AMPN;
+    results.OMRC = results.AMC * FIXED_CONSTANTS.OMP;
 
-            // PI/SI calculations (Index size remains constant regardless of node count)
-            const PISU_BYTES = inputs.MOC * inputs.RF * FIXED_CONSTANTS.PI_ENTRY_SIZE;
-            results.PISU = PISU_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
+    // Index Sizing
+    const PISU_BYTES = inputs.MOC * inputs.RF * FIXED_CONSTANTS.PI_ENTRY_SIZE;
+    results.PISU = PISU_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
+    const SI_PART_1_BYTES = (inputs.MOC * inputs.RF * inputs.ASEO * FIXED_CONSTANTS.SI_ENTRY_SIZE) / FIXED_CONSTANTS.SI_DENSITY_FACTOR;
+    const SI_PART_2_GB = inputs.NSI * FIXED_CONSTANTS.SI_OVERHEAD_MIB / FIXED_CONSTANTS.MIB_TO_GB;
+    results.SISU = (SI_PART_1_BYTES / FIXED_CONSTANTS.BYTES_TO_GB) + SI_PART_2_GB; 
 
-            const SI_PART_1_BYTES = (inputs.MOC * inputs.RF * inputs.ASEO * FIXED_CONSTANTS.SI_ENTRY_SIZE) / FIXED_CONSTANTS.SI_DENSITY_FACTOR;
-            const SI_PART_2_GB = inputs.NSI * FIXED_CONSTANTS.SI_OVERHEAD_MIB / FIXED_CONSTANTS.MIB_TO_GB;
-            results.SISU = (SI_PART_1_BYTES / FIXED_CONSTANTS.BYTES_TO_GB) + SI_PART_2_GB; 
+    results.TMU = results.OMRC + results.PISU + results.SISU;
+    results.TMT = (results.PISU + results.SISU) * (1 + inputs.TP) + results.OMRC;
+    results.TSAPC = inputs.NPC * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
+    const TDS_BYTES = inputs.MOC * inputs.RF * inputs.ARS;
+    results.TDS = TDS_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
 
-            // Total memory used (Base GB) [TMU]
-            results.TMU = results.OMRC + results.PISU + results.SISU;
-            
-            // Total mem + tombstones (GB) [TMT]
-            results.TMT = (results.PISU + results.SISU) * (1 + inputs.TP) + results.OMRC;
-            
-            // Total Storage available per cluster (GB) [TSAPC]
-            results.TSAPC = inputs.NPC * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
+    // Performance Fundamentals (Node-level) - NEW LOGIC
+    results.TPUT_Node = inputs.DPN * FIXED_CONSTANTS.THROUGHPUT_PER_DISK_MBPS; // Total Throughput per node
+    results.IOPS_Node = inputs.DPN * FIXED_CONSTANTS.IOPS_PER_DISK_K;         // Total IOPS (K) per node
 
-            // Total Data Stored (GB) [TDS]
-            const TDS_BYTES = inputs.MOC * inputs.RF * inputs.ARS;
-            results.TDS = TDS_BYTES / FIXED_CONSTANTS.BYTES_TO_GB;
 
-            // Performance Fundamentals (Node-level)
-results.TPUT_Node = inputs.DPN * FIXED_CONSTANTS.THROUGHPUT_PER_DISK_MBPS;
-results.IOPS_Node = inputs.DPN * FIXED_CONSTANTS.IOPS_PER_DISK_K;
-            
-            // --- 2.2.2 HEALTHY CLUSTER UTILIZATION ---
-            results.ASU = (results.TDS / results.TSAPC) * 100;
-            results.TMBU = (results.TMU / results.AMC) * 100;
-            results.TMUT = (results.TMT / results.AMC) * 100;
-            results.TMAPC = results.AMC; // Total Available Memory
+    // --- 2.2.2 HEALTHY CLUSTER UTILIZATION ---
+    
+    // Capacity Utilization
+    results.ASU = (results.TDS / results.TSAPC) * 100;
+    results.TMBU = (results.TMU / results.AMC) * 100;
+    results.TMUT = (results.TMT / results.AMC) * 100;
+    results.TMAPC = results.AMC; // Total Available Memory
 
-            // Performance Capacity (Healthy)
-results.Healthy_TPUT = inputs.NPC * results.TPUT_Node;
-results.Healthy_IOPS = inputs.NPC * results.IOPS_Node;
-            
-            // --- 2.2.3 FAILURE SCENARIO CALCULATIONS ---
-            
-            const nodes = inputs.NPC;
-            const lost = inputs.NODES_LOST;
-            const effectiveNodes = Math.max(0, nodes - lost);
-            
-            // 1. Failure Available Capacity (Storage and Memory decrease)
-            results.Fail_TSAPC = effectiveNodes * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
-            results.Fail_AMC = effectiveNodes * inputs.AMPN;
-            
-            // 2. Utilization Recalculation (Handle Division by Zero if all nodes are lost)
-            results.Fail_ASU = (results.Fail_TSAPC > 0) ? (results.TDS / results.Fail_TSAPC) * 100 : Infinity;
-            results.Fail_TMBU = (results.Fail_AMC > 0) ? (results.TMU / results.Fail_AMC) * 100 : Infinity;
-            results.Fail_TMUT = (results.Fail_AMC > 0) ? (results.TMT / results.Fail_AMC) * 100 : Infinity;
+    // Performance Capacity (Healthy) - NEW LOGIC
+    results.Healthy_TPUT = inputs.NPC * results.TPUT_Node; // Peak TPUT per cluster
+    results.Healthy_IOPS = inputs.NPC * results.IOPS_Node;   // Estimated IOPS per cluster
 
-            return results;
-        }
 
+    // --- 2.2.3 FAILURE SCENARIO CALCULATIONS ---
+    
+    const nodes = inputs.NPC;
+    const lost = inputs.NODES_LOST;
+    const effectiveNodes = Math.max(0, nodes - lost);
+    
+    // Failure Available Capacity
+    results.Fail_TSAPC = effectiveNodes * inputs.DPN * inputs.DS * (1 - FIXED_CONSTANTS.CSOP);
+    results.Fail_AMC = effectiveNodes * inputs.AMPN;
+
+    // Failure Performance - NEW LOGIC
+    results.Fail_TPUT = effectiveNodes * results.TPUT_Node;
+    results.Fail_IOPS = effectiveNodes * results.IOPS_Node;
+    
+    // Utilization Recalculation (Capacity)
+    results.Fail_ASU = (results.Fail_TSAPC > 0) ? (results.TDS / results.Fail_TSAPC) * 100 : Infinity;
+    results.Fail_TMBU = (results.TMU / results.Fail_AMC) * 100 : Infinity;
+    results.Fail_TMUT = (results.TMT / results.Fail_AMC) * 100 : Infinity;
+
+    return results;
+}
         // ===============================================
         // 2.3 UI & RENDERING LOGIC
         // ===============================================
