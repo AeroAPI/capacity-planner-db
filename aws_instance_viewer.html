@@ -54,80 +54,57 @@
 
     <!-- 2. JAVASCRIPT LOGIC -->
     <script>
-        // --- Static Data Source: AWS Instance Specs ---
+        // --- Static Data Source: AWS Instance Specs (EXPANDED LIST) ---
         const AWS_INSTANCES = {
-            "t3.micro": {
-                vCPU: 2,
-                memory: "1 GiB",
-                storage: "EBS Only",
-                network: "Low to Moderate",
-                dedicated_storage: "No",
-                description: "Burstable performance instance for general-purpose workloads, suitable for microservices and small databases."
-            },
-            "t3.small": {
-                vCPU: 2,
-                memory: "2 GiB",
-                storage: "EBS Only",
-                network: "Low to Moderate",
-                dedicated_storage: "No",
-                description: "Burstable instance with a balance of compute, memory, and networking resources."
-            },
-            "m5.large": {
-                vCPU: 2,
-                memory: "8 GiB",
-                storage: "EBS Only",
-                network: "Up to 10 Gbps",
-                dedicated_storage: "No",
-                description: "General purpose instance offering a balance of compute, memory, and network for most applications."
-            },
-            "m5.xlarge": {
-                vCPU: 4,
-                memory: "16 GiB",
-                storage: "EBS Only",
-                network: "Up to 10 Gbps",
-                dedicated_storage: "No",
-                description: "General purpose instance, good for mid-sized databases, web/app servers, and enterprise applications."
-            },
-            "c6i.xlarge": {
-                vCPU: 4,
-                memory: "8 GiB",
-                storage: "EBS Only",
-                network: "Up to 12.5 Gbps",
-                dedicated_storage: "No",
-                description: "Compute-optimized instance ideal for compute-intensive tasks, batch processing, and high-performance front-ends."
-            },
-            "c6i.4xlarge": {
-                vCPU: 16,
-                memory: "32 GiB",
-                storage: "EBS Only",
-                network: "Up to 50 Gbps",
-                dedicated_storage: "No",
-                description: "High-end compute instance for very demanding scientific modeling and distributed analytics."
-            },
-            "r6g.4xlarge": {
-                vCPU: 16,
-                memory: "128 GiB",
-                storage: "EBS Only",
-                network: "Up to 25 Gbps",
-                dedicated_storage: "No",
-                description: "Memory-optimized instance powered by AWS Graviton2 processors, ideal for in-memory caches and large databases."
-            },
-            "i3en.2xlarge": {
-                vCPU: 8,
-                memory: "64 GiB",
-                storage: "2 x 2.37 TB NVMe SSD",
-                network: "Up to 25 Gbps",
-                dedicated_storage: "Yes (Local NVMe)",
-                description: "Storage-optimized instance designed for high I/O operations, making it suitable for transactional databases and caches."
-            },
-            "i4i.large": {
-                vCPU: 2,
-                memory: "16 GiB",
-                storage: "1 x 475 GB NVme SSD",
-                network: "Up to 12.5 Gbps",
-                dedicated_storage: "Yes (Local NVMe)",
-                description: "Latest generation storage-optimized instance offering faster storage performance and lower latency."
-            }
+            // Original 9 Instances
+            "t3.micro": { vCPU: 2, memory: "1 GiB", storage: "EBS Only", network: "Low to Moderate", dedicated_storage: "No", description: "Burstable performance instance for general-purpose workloads, suitable for microservices and small databases." },
+            "t3.small": { vCPU: 2, memory: "2 GiB", storage: "EBS Only", network: "Low to Moderate", dedicated_storage: "No", description: "Burstable instance with a balance of compute, memory, and networking resources." },
+            "m5.large": { vCPU: 2, memory: "8 GiB", storage: "EBS Only", network: "Up to 10 Gbps", dedicated_storage: "No", description: "General purpose instance offering a balance of compute, memory, and network for most applications." },
+            "m5.xlarge": { vCPU: 4, memory: "16 GiB", storage: "EBS Only", network: "Up to 10 Gbps", dedicated_storage: "No", description: "General purpose instance, good for mid-sized databases, web/app servers, and enterprise applications." },
+            "c6i.xlarge": { vCPU: 4, memory: "8 GiB", storage: "EBS Only", network: "Up to 12.5 Gbps", dedicated_storage: "No", description: "Compute-optimized instance ideal for compute-intensive tasks, batch processing, and high-performance front-ends." },
+            "c6i.4xlarge": { vCPU: 16, memory: "32 GiB", storage: "EBS Only", network: "Up to 50 Gbps", dedicated_storage: "No", description: "High-end compute instance for very demanding scientific modeling and distributed analytics." },
+            "r6g.4xlarge": { vCPU: 16, memory: "128 GiB", storage: "EBS Only", network: "Up to 25 Gbps", dedicated_storage: "No", description: "Memory-optimized instance powered by AWS Graviton2 processors, ideal for in-memory caches and large databases." },
+            "i3en.2xlarge": { vCPU: 8, memory: "64 GiB", storage: "2 x 2.37 TB NVMe SSD", network: "Up to 25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Storage-optimized instance designed for high I/O operations, making it suitable for transactional databases and caches." },
+            "i4i.large": { vCPU: 2, memory: "16 GiB", storage: "1 x 475 GB NVme SSD", network: "Up to 12.5 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Latest generation storage-optimized instance offering faster storage performance and lower latency." },
+            
+            // New Requested Instances
+            "c5ad.8xlarge": { vCPU: 32, memory: "64 GiB", storage: "2 x 600 GB NVMe SSD", network: "10 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Compute-optimized with AMD processor and fast local NVMe storage." },
+            "c5d.12xlarge": { vCPU: 48, memory: "96 GiB", storage: "2 x 900 GB NVMe SSD", network: "12 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Compute-optimized with Intel processor and fast local NVMe storage." },
+            "c5n.9xlarge": { vCPU: 36, memory: "72 GiB", storage: "EBS Only", network: "50 Gbps", dedicated_storage: "No", description: "Compute-optimized, focused on high network bandwidth performance." },
+            "c6gd.8xlarge": { vCPU: 32, memory: "64 GiB", storage: "2 x 950 GB NVMe SSD", network: "12.5 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Graviton2 (ARM) compute instance with dedicated NVMe storage." },
+            "c6gn.8xlarge": { vCPU: 32, memory: "64 GiB", storage: "EBS Only", network: "50 Gbps", dedicated_storage: "No", description: "Graviton2 (ARM) compute instance with high network throughput." },
+            "c6id.8xlarge": { vCPU: 32, memory: "64 GiB", storage: "1 x 950 GB NVMe SSD", network: "15 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Compute-optimized, Intel processor, with fast local NVMe storage." },
+            "c7gd.8xlarge": { vCPU: 32, memory: "64 GiB", storage: "2 x 950 GB NVMe SSD", network: "15 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Latest Graviton3 compute instance with dedicated NVMe storage." },
+            "c7i-flex.8xlarge": { vCPU: 32, memory: "64 GiB", storage: "EBS Only", network: "15 Gbps", dedicated_storage: "No", description: "Intel flexible compute instance for cost-effective performance." },
+            "c7i.8xlarge": { vCPU: 32, memory: "64 GiB", storage: "EBS Only", network: "25 Gbps", dedicated_storage: "No", description: "Latest Intel compute instance with high network performance." },
+            "i3.8xlarge": { vCPU: 32, memory: "244 GiB", storage: "2 x 1.9 TB NVMe SSD", network: "10 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "High I/O instance from the previous generation, suitable for transactional workloads." },
+            "i3en.24xlarge": { vCPU: 96, memory: "768 GiB", storage: "8 x 7.5 TB NVMe SSD", network: "100 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Extreme I/O optimized instance with massive storage capacity and network throughput." },
+            "i4g.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "4 x 1.9 TB NVMe SSD", network: "25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Graviton2 I/O instance with a large amount of fast local storage." },
+            "i4i.16xlarge": { vCPU: 64, memory: "512 GiB", storage: "4 x 3.75 TB NVMe SSD", network: "50 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Intel I/O instance with high memory and massive local NVMe capacity." },
+            "i7i.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "2 x 3.75 TB NVMe SSD", network: "25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "New generation Intel I/O optimized instance with high memory." },
+            "i8g.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "2 x 3.75 TB NVMe SSD", network: "25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "New generation Graviton3 I/O optimized instance with high memory." },
+            "im4gn.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "4 x 1.9 TB NVMe SSD", network: "25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Graviton2 I/O instance balanced for transactional and large-scale data processing." },
+            "is4gen.8xlarge": { vCPU: 32, memory: "192 GiB", storage: "4 x 7.5 TB NVMe SSD", network: "25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Storage optimized instance with a balance of memory and huge local NVMe capacity." },
+            "m5ad.8xlarge": { vCPU: 32, memory: "128 GiB", storage: "2 x 600 GB NVMe SSD", network: "10 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "General purpose, AMD processor, local NVMe storage." },
+            "m5d.8xlarge": { vCPU: 32, memory: "128 GiB", storage: "2 x 600 GB NVMe SSD", network: "10 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "General purpose, Intel processor, local NVMe storage." },
+            "m5dn.8xlarge": { vCPU: 32, memory: "128 GiB", storage: "2 x 600 GB NVMe SSD", network: "25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "General purpose, Intel processor, high network, local NVMe storage." },
+            "m6gd.8xlarge": { vCPU: 32, memory: "128 GiB", storage: "1 x 950 GB NVMe SSD", network: "12.5 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Graviton2 general purpose instance with fast local NVMe storage." },
+            "m6id.8xlarge": { vCPU: 32, memory: "128 GiB", storage: "1 x 950 GB NVMe SSD", network: "15 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Intel general purpose instance with fast local NVMe storage." },
+            "m6idn.8xlarge": { vCPU: 32, memory: "128 GiB", storage: "1 x 950 GB NVMe SSD", network: "50 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Intel general purpose, high network, local NVMe storage." },
+            "m7gd.8xlarge": { vCPU: 32, memory: "128 GiB", storage: "2 x 950 GB NVMe SSD", network: "15 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Graviton3 general purpose instance with local NVMe storage." },
+            "r5ad.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "2 x 600 GB NVMe SSD", network: "10 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Memory-optimized, AMD processor, local NVMe storage." },
+            "r5d.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "2 x 600 GB NVMe SSD", network: "10 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Memory-optimized, Intel processor, local NVMe storage." },
+            "r5dn.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "2 x 600 GB NVMe SSD", network: "25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Memory-optimized, high network, local NVMe storage." },
+            "r6gd.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "1 x 950 GB NVMe SSD", network: "12.5 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Graviton2 memory-optimized instance with fast local NVMe storage." },
+            "r6id.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "1 x 950 GB NVMe SSD", network: "15 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Intel memory-optimized instance with fast local NVMe storage." },
+            "r6idn.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "1 x 950 GB NVMe SSD", network: "50 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "Intel memory-optimized, high network, local NVMe storage." },
+            "r7gd.8xlarge": { vCPU: 32, memory: "256 GiB", storage: "2 x 950 GB NVMe SSD", network: "15 Gbps", dedicated_storage: "Yes (Local NVme)", description: "Graviton3 memory-optimized instance with local NVMe storage." },
+            "t4g.medium": { vCPU: 2, memory: "4 GiB", storage: "EBS Only", network: "Up to 5 Gbps", dedicated_storage: "No", description: "Burstable instance powered by Graviton2 processors." },
+            "x1e.8xlarge": { vCPU: 32, memory: "1024 GiB", storage: "1 x 1,920 GB SSD", network: "10 Gbps", dedicated_storage: "Yes (Local SSD)", description: "Extreme memory-optimized instance for large-scale, in-memory databases." },
+            "x2gd.8xlarge": { vCPU: 32, memory: "512 GiB", storage: "1 x 1,920 GB NVMe SSD", network: "12.5 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "High memory, Graviton2, local NVMe storage optimized." },
+            "x2idn.16xlarge": { vCPU: 64, memory: "1024 GiB", storage: "1 x 3.75 TB NVMe SSD", network: "75 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "High memory, high network, local NVMe storage instance." },
+            "x2iedn.8xlarge": { vCPU: 32, memory: "512 GiB", storage: "1 x 950 GB NVMe SSD", network: "25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "High memory, high throughput, local NVMe storage instance." },
+            "z1d.12xlarge": { vCPU: 48, memory: "384 GiB", storage: "2 x 900 GB NVMe SSD", network: "25 Gbps", dedicated_storage: "Yes (Local NVMe)", description: "High compute/high frequency instance with local NVMe storage." }
         };
 
         // Function to populate the dropdown menu
@@ -150,53 +127,64 @@
             });
         }
 
-// Function to update the specification output panel
-function updateSpecs(instanceName) {
-    // Target the dynamic content body inside the card
-    const outputPanel = document.getElementById('spec-output-body'); 
-    const specs = AWS_INSTANCES[instanceName];
+        // Function to update the specification output panel
+        function updateSpecs(instanceName) {
+            // Target the dynamic content body inside the card
+            const outputPanel = document.getElementById('spec-output-body'); 
+            const specs = AWS_INSTANCES[instanceName];
 
-    if (!specs) {
-        outputPanel.innerHTML = '<p class="text-center text-gray-500">Please select an instance type from the left panel.</p>';
-        return;
-    }
+            if (!specs) {
+                outputPanel.innerHTML = '<p class="text-center text-gray-500">Please select an instance type from the left panel.</p>';
+                return;
+            }
 
-    // Helper function to create a compact, single-line spec item
-    const createSpecItem = (label, value) => {
-        // Label is explicitly set to be bold using the spec-label class (font-weight: 600)
-        return `
-            <div class="flex justify-between items-center py-1">
-                <p class="spec-label">${label}</p>
-                <p class="spec-value">${value}</p>
-            </div>
-        `;
-    };
+            // Helper function to create a spec item based on column requirements
+            const createSpecItem = (label, value, isTighter = false) => {
+                if (isTighter) {
+                    // Tighter structure (for Core Metrics): Uses width ratio to reduce the gap
+                    return `
+                        <div class="flex items-center py-1">
+                            <p class="spec-label w-2/5">${label}</p>
+                            <p class="spec-value w-3/5 text-right">${value}</p>
+                        </div>
+                    `;
+                } else {
+                    // Balanced structure (for Features): Uses justify-between to spread the label and value
+                    return `
+                        <div class="flex justify-between items-center py-1">
+                            <p class="spec-label">${label}</p>
+                            <p class="spec-value">${value}</p>
+                        </div>
+                    `;
+                }
+            };
 
-    // Create the HTML content for the selected instance
-    const content = `
-        <h4 class="text-xl font-bold text-indigo-800 mb-4">${instanceName.toUpperCase()}</h4>
-        <p class="text-sm text-gray-600 mb-6">${specs.description}</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            
-            <!-- LEFT COLUMN (3 Items) -->
-            <div class="space-y-1 md:border-r md:pr-4">
+            // Create the HTML content for the selected instance
+            const content = `
+                <h4 class="text-xl font-bold text-indigo-800 mb-4">${instanceName.toUpperCase()}</h4>
+                <p class="text-sm text-gray-600 mb-6">${specs.description}</p>
                 
-                ${createSpecItem('vCPUs', specs.vCPU)}
-                ${createSpecItem('Memory (RAM)', specs.memory)}
-                ${createSpecItem('Storage', specs.storage)}
-            </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    
+                    <!-- LEFT COLUMN (Core Sizing Metrics: 3 Items) - TIGHTER SPACING -->
+                    <div class="space-y-1 md:border-r md:pr-4">
+                        
+                        ${createSpecItem('vCPUs', specs.vCPU, true)}
+                        ${createSpecItem('Memory (RAM)', specs.memory, true)}
+                        ${createSpecItem('Storage', specs.storage, true)}
+                    </div>
 
-            <!-- RIGHT COLUMN (2 Items) -->
-            <div class="space-y-1 md:pl-4 md:border-l">
-                
-                ${createSpecItem('Network Performance', specs.network)}
-                ${createSpecItem('Local NVMe/Instance Store', specs.dedicated_storage)}
-            </div>
-        </div>
-    `;
-    outputPanel.innerHTML = content;
-}
+                    <!-- RIGHT COLUMN (Specialized Features: 2 Items) - BALANCED SPACING -->
+                    <div class="space-y-1 md:pl-4">
+                        
+                        ${createSpecItem('Network Performance', specs.network, false)}
+                        ${createSpecItem('Local NVMe/Instance Store', specs.dedicated_storage, false)}
+                    </div>
+                </div>
+            `;
+            outputPanel.innerHTML = content;
+        }
+
         // Initialize the dropdown when the page loads
         window.onload = populateDropdown;
     </script>
