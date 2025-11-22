@@ -1,5 +1,5 @@
 """
-Core calculation functions for the Distributed DB Capacity Planner (v114).
+Core calculation functions for the Distributed DB Capacity Planner (v115).
 
 This module contains the logic for determining storage and memory utilization 
 based on topology, workload, and server configurations.
@@ -74,8 +74,9 @@ def calculate_capacity(inputs: Dict[str, Any]) -> Dict[str, float]:
 
     # --- 2.2.3 FAILURE SCENARIO CALCULATIONS ---
     
-    effectiveNodes = max(0, NPC - NODES_LOST)
+effectiveNodes = max(0, NPC - NODES_LOST)
     
+    # 1. Failure Available Capacity (Storage and Memory decrease)
     results['Fail_TSAPC'] = effectiveNodes * DPN * DS * (1 - config.CLUSTER_STORAGE_OVERHEAD_PCT)
     results['Fail_AMC'] = effectiveNodes * AMPN
 
@@ -83,16 +84,15 @@ def calculate_capacity(inputs: Dict[str, Any]) -> Dict[str, float]:
     results['Fail_TPUT'] = effectiveNodes * results['TPUT_Node']
     results['Fail_IOPS'] = effectiveNodes * results['IOPS_Node']
     
-    # Utilization Recalculation (Capacity)
-   # Note: Use 'float('inf')' when denominator is zero, as capacity utilization is infinite.
+    # 2. Utilization Recalculation (Handle Division by Zero)
     
-    # Calculate Fail_ASU safely
+    # Fail_ASU (Storage)
     if results['Fail_TSAPC'] > 0:
         results['Fail_ASU'] = (results['TDS'] / results['Fail_TSAPC']) * 100
     else:
         results['Fail_ASU'] = float('inf')
 
-    # Calculate Fail_TMBU and Fail_TMUT safely
+    # Fail_TMBU and Fail_TMUT (Memory)
     if results['Fail_AMC'] > 0:
         results['Fail_TMBU'] = (results['TMU'] / results['Fail_AMC']) * 100
         results['Fail_TMUT'] = (results['TMT'] / results['Fail_AMC']) * 100
