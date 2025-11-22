@@ -1,8 +1,10 @@
 """
-Core calculation functions for the Distributed DB Capacity Planner.
+Core calculation functions for the Distributed DB Capacity Planner (v113).
 
-This module is designed to be pure logic, isolated from UI/Widgets.
+This module contains the logic for determining storage and memory utilization 
+based on topology, workload, and server configurations.
 """
+
 from typing import Dict, Any
 import math
 import config
@@ -21,7 +23,7 @@ def calculate_capacity(inputs: Dict[str, Any]) -> Dict[str, float]:
     TP = inputs['TP'] / 100 
     NODES_LOST = inputs['NODES_LOST']
     
-    # MOC is in Billions in the config, convert to raw count (10^9)
+    # MOC is in Billions in the config, convert to raw count
     MOC = inputs['MOC'] * 1000000000
     ARS = inputs['ARS']
     ASEO = inputs['ASEO']
@@ -51,7 +53,9 @@ def calculate_capacity(inputs: Dict[str, Any]) -> Dict[str, float]:
     results['TDS'] = TDS_bytes / config.BYTES_TO_GB
     
     # Performance Fundamentals (Node-level)
+    # Total Throughput per node = Throughput per Disk * Devices per node
     results['TPUT_Node'] = DPN * config.THROUGHPUT_PER_DISK_MBPS
+    # Total IOPS (K) per node = IOPS per Disk (K) * Devices per node
     results['IOPS_Node'] = DPN * config.IOPS_PER_DISK_K
 
 
@@ -61,7 +65,10 @@ def calculate_capacity(inputs: Dict[str, Any]) -> Dict[str, float]:
     results['TMUT'] = (results['TMT'] / results['AMC']) * 100 if results['AMC'] else float('inf')
     results['TMAPC'] = results['AMC']
 
+    # Performance Capacity (Healthy)
+    # Peak Throughput per cluster = TPUT per node * NPC
     results['Healthy_TPUT'] = NPC * results['TPUT_Node']
+    # Estimated IOPS per cluster = IOPS per node * NPC
     results['Healthy_IOPS'] = NPC * results['IOPS_Node']
 
 
@@ -72,6 +79,7 @@ def calculate_capacity(inputs: Dict[str, Any]) -> Dict[str, float]:
     results['Fail_TSAPC'] = effectiveNodes * DPN * DS * (1 - config.CLUSTER_STORAGE_OVERHEAD_PCT)
     results['Fail_AMC'] = effectiveNodes * AMPN
 
+    # Failure Performance
     results['Fail_TPUT'] = effectiveNodes * results['TPUT_Node']
     results['Fail_IOPS'] = effectiveNodes * results['IOPS_Node']
     
