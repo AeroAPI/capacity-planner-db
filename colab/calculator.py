@@ -1,5 +1,5 @@
 """
-Core calculation functions for the Distributed DB Capacity Planner (v113).
+Core calculation functions for the Distributed DB Capacity Planner (v114).
 
 This module contains the logic for determining storage and memory utilization 
 based on topology, workload, and server configurations.
@@ -84,8 +84,20 @@ def calculate_capacity(inputs: Dict[str, Any]) -> Dict[str, float]:
     results['Fail_IOPS'] = effectiveNodes * results['IOPS_Node']
     
     # Utilization Recalculation (Capacity)
-    results['Fail_ASU'] = (results['Fail_TSAPC'] > 0) and (results['TDS'] / results['Fail_TSAPC']) * 100 or float('inf')
-    results['Fail_TMBU'] = (results['TMU'] / results['Fail_AMC']) * 100 or float('inf')
-    results['Fail_TMUT'] = (results['TMT'] / results['Fail_AMC']) * 100 or float('inf')
+   # Note: Use 'float('inf')' when denominator is zero, as capacity utilization is infinite.
+    
+    # Calculate Fail_ASU safely
+    if results['Fail_TSAPC'] > 0:
+        results['Fail_ASU'] = (results['TDS'] / results['Fail_TSAPC']) * 100
+    else:
+        results['Fail_ASU'] = float('inf')
+
+    # Calculate Fail_TMBU and Fail_TMUT safely
+    if results['Fail_AMC'] > 0:
+        results['Fail_TMBU'] = (results['TMU'] / results['Fail_AMC']) * 100
+        results['Fail_TMUT'] = (results['TMT'] / results['Fail_AMC']) * 100
+    else:
+        results['Fail_TMBU'] = float('inf')
+        results['Fail_TMUT'] = float('inf')
 
     return results
