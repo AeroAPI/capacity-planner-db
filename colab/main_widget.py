@@ -1,5 +1,5 @@
 """
-Main Interactive Widget (v113).
+Main Interactive Widget (v115).
 
 Sets up the ipywidgets layout and displays the calculated capacity and 
 performance metrics for both Healthy and Failure Scenarios, using modular imports.
@@ -173,99 +173,4 @@ def calculate_and_display(**kwargs):
     section_4_html = VBox([
         HTML(value=f'<h4 style="color: #f97316; font-weight: bold; margin-bottom: 0.5rem;">4. Performance Analysis (Healthy Cluster)</h4>'),
         HTML(value=render_performance_metric("Peak Cluster Throughput (MB/s)", results['Healthy_TPUT'], results['TPUT_Node'], npc_value, 0, "MB/s", get_color_performance(results['Healthy_TPUT']))),
-        HTML(value=render_performance_metric("Estimated Cluster IOPS (K)", results['Healthy_IOPS'], results['IOPS_Node'], npc_value, 0, "K", get_color_performance(results['Healthy_IOPS']))),
-    ])
-    
-    # --- SECTION 5: FAILURE PERFORMANCE ---
-    section_5_html = VBox([
-        HTML(value=f'<h4 style="color: #dc2626; font-weight: bold; margin-bottom: 0.5rem;">5. Performance Analysis (Failure Scenario)</h4>'),
-        HTML(value=render_performance_metric("Remaining Throughput (MB/s)", results['Fail_TPUT'], results['TPUT_Node'], npc_value - nodes_lost_value, nodes_lost_value, "MB/s", get_color_performance(results['Fail_TPUT'], True))),
-        HTML(value=render_performance_metric("Remaining IOPS (K)", results['Fail_IOPS'], results['IOPS_Node'], npc_value - nodes_lost_value, nodes_lost_value, "K", get_color_performance(results['Fail_IOPS'], True))),
-    ])
-    
-    # --- ASSEMBLE FINAL OUTPUT ---
-    
-    # Row 1: Capacity (S2/S3)
-    capacity_row = HBox([section_2_html, section_3_html], layout=Layout(justify_content='space-between', width='100%'))
-    
-    # Row 2: Performance (S4/S5)
-    performance_row = HBox([section_4_html, section_5_html], layout=Layout(justify_content='space-between', width='100%'))
-    
-    output_vbox = VBox([
-        capacity_row,
-        HTML('<hr style="margin: 20px 0; border-color: #e5e7eb;">'),
-        performance_row,
-        HTML('<hr style="margin: 20px 0; border-color: #e5e7eb;">'),
-        # Placeholder for Section 6 (Calculations)
-        HTML(f'<h3 style="font-weight: bold; color: #6b7280;">6. Calculations and Definitions (To be built)</h3>'),
-    ])
-    
-    return output_vbox
-
-# [REMAINDER OF WIDGET SETUP AND LAYOUT]
-
-# Create a map of widgets for easy access
-widget_ids = ['RF', 'NPC', 'DPN', 'DS', 'NODES_LOST', 'MOC', 'ARS', 'ASEO', 'NSI', 'TP', 'AMPN']
-widget_map: Dict[str, Any] = {}
-for id in widget_ids:
-    widget_map[id] = create_slider(id)
-
-# 1. Topology Panel Layout
-topology_box = VBox([
-    HTML(f'<div style="{TITLE_STYLE}">Topology</div>'), 
-    widget_map['RF'], 
-    widget_map['NPC'], 
-    widget_map['DPN'], 
-    widget_map['DS'],
-    HTML('<hr style="margin: 10px 0; border-color: #bfdbfe;">'),
-    HTML(f'<div style="{TITLE_STYLE}; color: #8b5cf6;">Resilience Input</div>'),
-    widget_map['NODES_LOST'],
-    HTML('<p style="font-size: 0.8em; color: #6b7280; margin-top: 5px;">Nodes Lost must be ≤ Nodes per Cluster.</p>')
-], layout=Layout(width=LAYOUT_WIDTH, border=CARD_STYLE_TPL))
-
-
-# 2. Workload Panel Layout
-workload_box = VBox([
-    HTML(f'<div style="{TITLE_STYLE}; color: #ec4899;">Workload Inputs</div>'), 
-    widget_map['MOC'], 
-    widget_map['ARS'], 
-    widget_map['ASEO'], 
-    widget_map['NSI'],
-    HTML('<hr style="margin: 10px 0; border-color: #fbcfe8;">'),
-    widget_map['TP'],
-], layout=Layout(width=LAYOUT_WIDTH, border=CARD_STYLE_WKL))
-
-
-# 3. Server Specs & Overhead Panel Layout
-server_box = VBox([
-    HTML(f'<div style="{TITLE_STYLE}; color: #14b8a6;">Server Specs & Overhead</div>'), 
-    widget_map['AMPN'],
-    HTML('<hr style="margin: 10px 0; border-color: #99f6e4;">'),
-    HTML(f'<p style="font-size: 0.9em; color: #6b7280;">{config.DISPLAY_NAMES["CSOP"]}: {config.CLUSTER_STORAGE_OVERHEAD_PCT*100:.2f}%</p>'),
-    HTML(f'<p style="font-size: 0.9em; color: #6b7280;">{config.DISPLAY_NAMES["OMP"]}: {config.OVERHEAD_MEMORY_PCT*100:.2f}%</p>'),
-    HTML(f'<p style="font-size: 0.9em; color: #6b7280;">Throughput per Disk: {config.THROUGHPUT_PER_DISK_MBPS:,} MB/s</p>'),
-    HTML(f'<p style="font-size: 0.9em; color: #6b7280;">IOPS per Disk: {config.IOPS_PER_DISK_K:,} K</p>'),
-], layout=Layout(width=LAYOUT_WIDTH, border=CARD_STYLE_SERVER))
-
-
-# 4. Interactive Output Area (Must map all widgets used by calculate_and_display)
-output_area = interactive_output(
-    calculate_and_display, 
-    {k: widget_map[k] for k in widget_ids} # Maps all widgets used
-)
-
-# 5. Assemble Final Layout
-if __name__ == '__main__':
-    display(VBox([
-        HTML(f'<h1 style="{MAIN_HEADER_STYLE}">1. System & Workload Configuration</h1>'),
-        HBox([
-            topology_box,
-            workload_box,
-            server_box
-        ], layout=Layout(justify_content='space-between', width='100%')), 
-        
-        HTML('<hr style="margin: 20px 0; border-color: #e5e7eb;">'),
-        
-        HTML(f'<h3 style="{MAIN_HEADER_STYLE}">2. Capacity and Performance Analysis</h3>'),
-        output_area
-    ]))
+        HTML(value=render_performance_metric("Estimated Cluster IOPS (
