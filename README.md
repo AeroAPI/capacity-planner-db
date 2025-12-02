@@ -5,6 +5,7 @@ Under construction...
 ## 🚀 Project Versions
 
 1.  **Initial MVP:** Currently, displays utilization estimates based on basic sizing imputs. Access the tool here: [Capacity Planner Web GUI](https://wmaddux.github.io/capacity-planner-db/capacity_planner_mvp.html)
+1.  **Spreadsheet version:** Basically, the same with a performance block added: [Capacity Planner GSheet](https://docs.google.com/spreadsheets/d/175XXko30EAZ8zoe-InmQY2H8Cn2FDO4tBE_9y6NwgW0/edit?usp=sharing)
 
 
 ## Sub-projects (to be combined later)
