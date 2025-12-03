@@ -1,6 +1,11 @@
 # Distributed DB Capacity Planner
 
-Under construction...
+## Design goals (developing)
+1. Highly intuitive method of exploring the relationship between configuration inputs and system characteristic outputs
+2. Relate system characteristics to healthcheck type indicators
+3. Ensure the "math" is easy to validate (and compare to real results)
+4. The development platform is effectively extensible for continuous iteration
+5. Produce comparison reports to snapshot decisions and explore input ranges (such as record size)
 
 ## 🚀 Project Versions
 
